@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Emilio Ledesma — Software Developer Portfolio
 
-## Getting Started
+Professional portfolio website showcasing software engineering projects, technical skills, and applied computer science knowledge.
 
-First, run the development server:
+🌐 **Live Site:** https://emilioledesma.com
+
+---
+
+## 👨‍💻 About
+
+I am a computer engineer focused on AI/ML and low level systems. This portfolio serves as a centralized platform to demonstrate my technical abilities, problem-solving approach, and project experience as I develop my skills through the next 4 years of college
+
+This portfolio is actively maintained and evolves alongside my technical growth.
+
+---
+
+## 🧠 Technical Skills
+
+### Languages
+- TypeScript
+- JavaScript
+- Python
+
+### Frameworks & Libraries
+- Next.js (App Router)
+- React
+- Tailwind CSS
+
+### Core Concepts
+- Component-driven architecture
+- Responsive UI design
+- Performance optimization
+- Git-based version control
+
+### Tooling
+- ESLint
+- Prettier
+- npm
+- Vercel deployment
+
+---
+
+## 🏗 Architecture & Structure
+
+```
+src/
+  app/
+    page.tsx
+    layout.tsx
+  components/
+  lib/
+  styles/
+```
+
+- **App Router** for modern routing patterns  
+- **Reusable components** for maintainability  
+- **Utility modules** for separation of concerns  
+- Structured for scalability and future feature expansion (blog, backend integration, etc.)
+
+---
+
+## 🚀 Development
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run locally:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Production build:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 📂 Featured Sections
 
-To learn more about Next.js, take a look at the following resources:
+- About Me
+- Projects Showcase
+- Technical Skills
+- Contact Information
+- Resume Integration
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🎯 Professional Objective
 
-## Deploy on Vercel
+Seeking internship and entry-level software engineering opportunities where I can:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Contribute to real-world production systems
+- Strengthen full-stack development skills
+- Collaborate within professional engineering teams
+- Continue advancing my computer science foundation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 📬 Contact
+
+
+- [LinkedIn](https://www.linkedin.com/company/cloudflare/jobs/)
+
+- [School Email](mailto:escott15@calpoly.edu)
+ - [Personal Email](mailto:milii76@outlook.com)
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
