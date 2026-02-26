@@ -5,43 +5,66 @@ import StartProjectContact from "@/components/start-project-contact";
 const projects = [
   {
     id: "01",
-    slug: "realtime-commerce-observability",
-    name: "Realtime Commerce Observability",
-    year: "2026",
-    tags: ["Next.js", "TypeScript", "Postgres"],
-    href: "/work#realtime-commerce-observability",
+      slug: "mustang-market",
+    name: "mustang market",
+    year: "jan 2026",
+    tags: [
+      "Next.js",
+      "TypeScript",
+      "Firebase",
+      "Stripe Connect",
+      "Groq",
+      "Firestore",
+      "Vercel",
+    ],
+    href: "/work#mustang-market",
   },
   {
     id: "02",
-    slug: "streaming-qa-automation-console",
-    name: "Streaming QA Automation Console",
-    year: "2025",
-    tags: ["Playwright", "Node.js", "CI/CD"],
-    href: "/work#streaming-qa-automation-console",
+    slug: "cortex",
+    name: "cortex",
+    year: "feb 2026",
+    tags: ["TO BE DETERMINED"],
+    href: "/work#cortex",
   },
   {
     id: "03",
-    slug: "motion-first-design-system",
-    name: "Motion-First Design System",
-    year: "2025",
-    tags: ["React", "Tokens", "A11y"],
-    href: "/work#motion-first-design-system",
+    slug: "swoosh-analytics",
+    name: "swoosh analytics",
+    year: "dec 2025",
+    tags: [
+      "Python",
+      "Pandas",
+      "NumPy",
+      "Sckit-learn",
+      "MatPlotLib",
+      "Xgboost || Lightgbm",
+    ],
+    href: "/work#swoosh-analytics",
   },
   {
     id: "04",
-    slug: "headless-cms-delivery-engine",
-    name: "Headless CMS Delivery Engine",
-    year: "2024",
-    tags: ["Prismic", "GraphQL", "Edge"],
-    href: "/work#headless-cms-delivery-engine",
+    slug: "energy-usage-pattern-exploration",
+    name: "energy usage pattern exploration",
+    year: "dec 2025",
+    tags: ["Python", "Pandas", "NumPy"],
+    href: "/work#energy-usage-pattern-exploration",
   },
   {
     id: "05",
-    slug: "experimentation-insights-dashboard",
-    name: "Experimentation Insights Dashboard",
-    year: "2024",
-    tags: ["Data Viz", "Python", "API"],
-    href: "/work#experimentation-insights-dashboard",
+    slug: "instagram-follower-analyzer",
+    name: "instagram follower analyzer",
+    year: "jan 2026",
+    tags: ["Python", ".JSON"],
+    href: "/work#instagram-follower-analyzer",
+  },
+  {
+    id: "06",
+    slug: "lilianal-com",
+    name: "lilianal.com",
+    year: "feb 2025",
+    tags: ["Next.js", "Tailwind CSS", "Vercel"],
+    href: "/work#lilianal-com",
   },
 ];
 
@@ -54,11 +77,11 @@ export default function Home() {
       <section className="hero-block">
         <div className="hero-title-row">
           <div className="hero-title-copy">
-            <p className="hero-label">B.S Computer Engineering</p>
+            <p className="hero-label">B.S Computer Engineering - 2029</p>
             <h1>
-              Emilio Scott
+              Emilio Ledesma
               <br />
-              <span>Building @ Cal Poly SLO</span>
+              <span>building @ cal poly slo</span>
             </h1>
           </div>
 
@@ -66,8 +89,8 @@ export default function Home() {
         </div>
 
         <p className="hero-copy">
-          I design and ship high-polish digital products with a focus on
-          performance, interaction quality, and scalable frontend architecture.
+          I build intelligent and high-performance software systems, focusing on machine learning, 
+          low-level optimization, and scalable architecture, with experience across the full stack.
         </p>
 
         <div className="hero-actions">

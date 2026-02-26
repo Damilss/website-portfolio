@@ -12,7 +12,6 @@ export default function WorkPage() {
         <h1>View Work</h1>
         <p className="work-page-copy">
           A focused archive for projects I have shipped or am actively building.
-          Replace this data with your real links and deployment URLs.
         </p>
         <Link className="work-back-link mono" href="/">
           cd .. /home
@@ -37,24 +36,25 @@ export default function WorkPage() {
           <li id="mustang-market" className="terminal-project-card">
             <header className="terminal-project-head">
               <span className="terminal-project-index mono">01</span>
-              <h2>Mustang Market</h2>
+              <h2>mustang market</h2>
               <span className="terminal-status mono terminal-status-active">
                 active
               </span>
             </header>
 
             <p className="terminal-summary">
-              Peer-to-peer `.edu`-verified marketplace built for Cal Poly SLO.
+              peer-to-peer `.edu`-verified marketplace built for cal poly slo.
             </p>
 
             <div className="terminal-meta-row">
-              <p className="mono">year: Jan 2026</p>
+              <p className="mono">year: jan 2026</p>
               <p className="mono">stack:</p>
-              <ul className="terminal-stack" aria-label="Mustang Market stack">
+              <ul className="terminal-stack" aria-label="mustang market stack">
                 <li className="mono">Next.js</li>
                 <li className="mono">TypeScript</li>
                 <li className="mono">Firebase</li>
                 <li className="mono">Stripe Connect</li>
+                <li className="mono">Groq</li>
                 <li className="mono">Firestore</li>
                 <li className="mono">Vercel</li>
               </ul>
@@ -73,38 +73,93 @@ export default function WorkPage() {
           </li>
 
           {/* Project 02 */}
-          <li id="streaming-qa-automation-console" className="terminal-project-card">
+          <li id="cortex" className="terminal-project-card">
             <header className="terminal-project-head">
               <span className="terminal-project-index mono">02</span>
-              <h2>Streaming QA Automation Console</h2>
+              <h2>cortex</h2>
               <span className="terminal-status mono terminal-status-shipping">
                 shipping
               </span>
             </header>
 
             <p className="terminal-summary">
-              Terminal-like test orchestration dashboard for browser suites,
-              retries, snapshots, and flaky-run diagnostics.
+              a machine learning–driven mobile app that analyzes patient movement 
+              through on-device motion tracking and delivers real-time corrective 
+              feedback for prescribed physical therapy exercises.
             </p>
 
             <div className="terminal-meta-row">
-              <p className="mono">year: 2025</p>
+              <p className="mono">year: feb 2026</p>
               <p className="mono">stack:</p>
               <ul
                 className="terminal-stack"
                 aria-label="Streaming QA Automation Console stack"
               >
-                <li className="mono">Playwright</li>
-                <li className="mono">Node.js</li>
-                <li className="mono">Redis</li>
-                <li className="mono">GitHub Actions</li>
+                <li className="mono">TO BE DETERMINED</li>
+              </ul>
+            </div>
+          </li>
+
+          {/* Project 03 */}
+          <li id="swoosh-analytics" className="terminal-project-card">
+            <header className="terminal-project-head">
+              <span className="terminal-project-index mono">03</span>
+              <h2>swoosh analytics</h2>
+              <span className="terminal-status mono terminal-status-shipping">
+                shipping
+              </span>
+            </header>
+
+            <p className="terminal-summary">
+              a python-based machine learning project that 
+              leverages historical nba game data to engineer performance features and train gradient 
+              boosted models for game outcome prediction and edge analysis.
+            </p>
+
+            <div className="terminal-meta-row">
+              <p className="mono">year: dec 2025</p>
+              <p className="mono">stack:</p>
+              <ul className="terminal-stack" aria-label="swoosh analytics">
+                <li className="mono">Python</li>
+                <li className="mono">Pandas</li>
+                <li className="mono">NumPy</li>
+                <li className="mono">Sckit-learn</li>
+                <li className="mono">MatPlotLib</li>
+                <li className="mono">Xgboost || Lightgbm</li>
+              </ul>
+            </div>
+          </li>
+
+          {/* Project 04 */}
+          <li id="energy-usage-pattern-exploration" className="terminal-project-card">
+            <header className="terminal-project-head">
+              <span className="terminal-project-index mono">04</span>
+              <h2>energy usage pattern exploration</h2>
+              <span className="terminal-status mono terminal-status-archived">
+                archived
+              </span>
+            </header>
+
+            <p className="terminal-summary">
+              a data analysis pipeline built with pandas that processes 70,000+ household 
+              energy records, performing feature-level analysis and visualization to uncover consumption trends across temporal 
+              and environmental variables.
+            </p>
+
+            <div className="terminal-meta-row">
+              <p className="mono">year: dec 2025</p>
+              <p className="mono">stack:</p>
+              <ul className="terminal-stack" aria-label="Headless CMS Delivery Engine stack">
+                <li className="mono">Python</li>
+                <li className="mono">Pandas</li>
+                <li className="mono">NumPy</li>
               </ul>
             </div>
 
             <div className="terminal-actions">
               <a
                 className="terminal-link mono"
-                href="https://github.com"
+                href="https://github.com/escott15/energy-usage-pattern-exploration"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -113,98 +168,85 @@ export default function WorkPage() {
             </div>
           </li>
 
-          {/* Project 03 */}
-          <li id="motion-first-design-system" className="terminal-project-card">
+          {/* Project 05 */}
+          <li id="instagram-follower-analyzer" className="terminal-project-card">
             <header className="terminal-project-head">
-              <span className="terminal-project-index mono">03</span>
-              <h2>Motion-First Design System</h2>
-              <span className="terminal-status mono terminal-status-active">
-                active
+              <span className="terminal-project-index mono">05</span>
+              <h2>instagram follower analyzer</h2>
+              <span className="terminal-status mono terminal-status-archived">
+                archived
               </span>
             </header>
 
             <p className="terminal-summary">
-              Design token framework for consistent interaction timing,
-              transitions, and accessibility-safe animation defaults.
+              a Python script that processes 
+              structured JSON data from instagram account exports to compute
+              follower/following set differences and identify non-reciprocal connections.
             </p>
-
+          
             <div className="terminal-meta-row">
-              <p className="mono">year: 2025</p>
+              <p className="mono">year: jan 2026</p>
               <p className="mono">stack:</p>
               <ul className="terminal-stack" aria-label="Motion-First Design System stack">
-                <li className="mono">React</li>
-                <li className="mono">Tailwind</li>
-                <li className="mono">Storybook</li>
-                <li className="mono">A11y</li>
+                <li className="mono">Python</li>
+                <li className="mono">.JSON</li>
               </ul>
             </div>
 
             <div className="terminal-actions">
               <a
                 className="terminal-link mono"
-                href="#"
+                href="https://github.com/Damilss/instagram-unfollow-list"
+                target="_blank"
+                rel="noreferrer"
+              >
+                open_repo
+              </a>
+            </div>
+          </li>
+
+          {/* Project 06 */}
+          <li id="lilianal-com" className="terminal-project-card">
+            <header className="terminal-project-head">
+              <span className="terminal-project-index mono">06</span>
+              <h2>lilianal.com</h2>
+              <span className="terminal-status mono terminal-status-active">
+                active
+              </span>
+            </header>
+
+            <p className="terminal-summary">
+              Designed and deployed a custom website for individual clients using Next.js, 
+              focusing on responsive design and scalable frontend architecture.
+            </p>
+
+            <div className="terminal-meta-row">
+              <p className="mono">year: feb 2025</p>
+              <p className="mono">stack:</p>
+              <ul className="terminal-stack" aria-label="lilianal.com">
+                <li className="mono">Next.js</li>
+                <li className="mono">Tailwind CSS</li>
+                <li className="mono">Vercel</li>
+              </ul>
+            </div>
+
+            <div className="terminal-actions">
+              <a
+                className="terminal-link mono"
+                href="https://github.com/Damilss/LLpersonalwebsite"
+                target="_blank"
+                rel="noreferrer"
+              >
+                open_repo
+              </a>
+              <a
+                className="terminal-link mono"
+                href="https://lilianal.com" 
                 target="_blank"
                 rel="noreferrer"
               >
                 open_live
               </a>
-            </div>
-          </li>
-
-          {/* Project 04 */}
-          <li id="headless-cms-delivery-engine" className="terminal-project-card">
-            <header className="terminal-project-head">
-              <span className="terminal-project-index mono">04</span>
-              <h2>Headless CMS Delivery Engine</h2>
-              <span className="terminal-status mono terminal-status-archived">
-                archived
-              </span>
-            </header>
-
-            <p className="terminal-summary">
-              Content pipeline that normalizes CMS payloads and serves typed
-              contracts for high-performance frontend delivery.
-            </p>
-
-            <div className="terminal-meta-row">
-              <p className="mono">year: 2024</p>
-              <p className="mono">stack:</p>
-              <ul className="terminal-stack" aria-label="Headless CMS Delivery Engine stack">
-                <li className="mono">Prismic</li>
-                <li className="mono">GraphQL</li>
-                <li className="mono">TypeScript</li>
-                <li className="mono">Edge</li>
-              </ul>
-            </div>
-          </li>
-
-          {/* Project 05 */}
-          <li id="experimentation-insights-dashboard" className="terminal-project-card">
-            <header className="terminal-project-head">
-              <span className="terminal-project-index mono">05</span>
-              <h2>Experimentation Insights Dashboard</h2>
-              <span className="terminal-status mono terminal-status-archived">
-                archived
-              </span>
-            </header>
-
-            <p className="terminal-summary">
-              Experiment tracking and statistical impact summaries for product
-              teams running iterative A/B workflows.
-            </p>
-
-            <div className="terminal-meta-row">
-              <p className="mono">year: 2024</p>
-              <p className="mono">stack:</p>
-              <ul
-                className="terminal-stack"
-                aria-label="Experimentation Insights Dashboard stack"
-              >
-                <li className="mono">Python</li>
-                <li className="mono">FastAPI</li>
-                <li className="mono">Data Viz</li>
-                <li className="mono">Postgres</li>
-              </ul>
             </div>
           </li>
         </ol>

@@ -1,8 +1,7 @@
 const contactLinks = [
-  { label: "GitHub", href: "https://github.com" },
-  { label: "LinkedIn", href: "https://linkedin.com" },
-  { label: "X", href: "https://x.com" },
-  { label: "Email", href: "mailto:hello@example.com" },
+  { label: "GitHub", href: "https://github.com/Damilss" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/emilio-ledesma-scott-41146138a/" },
+  { label: "Email", href: "mailto:me@emilioledesma.com" },
 ];
 
 type FooterProps = {
@@ -44,7 +43,7 @@ export default function Footer({ variant = "default" }: FooterProps) {
           isCorner ? "contact-footer-signature-corner" : ""
         }`}
       >
-        {"\u00A9 Emilio Scott"}
+        {"\u00A9 Emilio Ledesma 2026"}
       </p>
     </footer>
   );

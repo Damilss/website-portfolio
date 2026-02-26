@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const PROJECT_EMAIL = "hello@example.com";
+const PROJECT_EMAIL = "me@emilioledesma.com";
 
 export default function StartProjectContact() {
   const [isOpen, setIsOpen] = useState(false);
