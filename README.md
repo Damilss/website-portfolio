@@ -9,7 +9,7 @@ A Next.js App Router portfolio with a minimal, terminal-influenced visual system
   - Inline top-right contact footer panel
   - Interactive `Start Project` reveal control
   - Work preview list
-- Dedicated Work page (`/work`) with terminal-style project cards
+- Dedicated Work page (`/work`) with terminal-style project cards (manually authored, per-card optional action links)
 - Custom 404 page (`app/not-found.tsx`) in same terminal language
 - Reusable contact footer component with variant support
 - Popular modern sans stack (`Manrope`/`Inter` + system fallbacks) + mono code stack

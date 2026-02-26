@@ -83,6 +83,7 @@ Applied patterns:
    - `corner`: used on Home inline with title row
 6. Start Project interaction migrated from static `mailto:` to animated reveal with copy-to-clipboard.
 7. Copyright integrated into footer.
+8. `/work` project cards switched to explicit per-card JSX layout (no array iteration) for direct manual editing.
 
 ## Issues Encountered and Resolutions
 
@@ -143,6 +144,22 @@ Commands run after major changes:
 - `npm run build`
 
 Current status: passing.
+
+## Work Page Editing Model (Manual Cards)
+
+`app/work/page.tsx` now uses explicit `<li className=\"terminal-project-card\">...</li>` blocks for each project instead of mapping an array.
+
+This was done so each project can be customized independently without editing shared object data.
+
+### Optional Action Links
+
+Inline JSX comments are now included in each card to guide optional link usage:
+
+- Keep/remove `open_repo` as needed.
+- Keep/remove `open_live` as needed.
+- Cards without actions include a commented template `terminal-actions` block you can paste in by uncommenting.
+
+This lets you control project CTA visibility per card at the markup level.
 
 ## Customization
 

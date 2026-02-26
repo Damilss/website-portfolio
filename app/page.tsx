@@ -54,11 +54,11 @@ export default function Home() {
       <section className="hero-block">
         <div className="hero-title-row">
           <div className="hero-title-copy">
-            <p className="hero-label">Creative Engineer / Product Developer</p>
+            <p className="hero-label">B.S Computer Engineering</p>
             <h1>
               Emilio Scott
               <br />
-              <span>Building Minimal, Interactive Web Systems</span>
+              <span>Building @ Cal Poly SLO</span>
             </h1>
           </div>
 
