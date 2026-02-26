@@ -1,37 +1,40 @@
 # Website Portfolio
 
-A Next.js App Router portfolio with a minimal, interactive single-page landing experience.
+A Next.js App Router portfolio with a minimal, terminal-influenced visual system.
 
-## Current Implementation
+## Current Features
 
-- Full landing-page rework (`app/page.tsx`) with:
-  - Hero block (headline, short positioning copy, CTA actions)
-  - Selected work list with tags/years
-  - Social links footer area
-- Custom global design system in `app/globals.css`:
-  - Dark grayscale palette
-  - Local typography stacks
-  - Shared motion timing and easing tokens
-  - Hover/focus interaction styling
-  - Reduced-motion support
-- Root layout metadata in `app/layout.tsx`
+- Custom Home page (`/`) with:
+  - Hero/title row
+  - Inline top-right contact footer panel
+  - Interactive `Start Project` reveal control
+  - Work preview list
+- Dedicated Work page (`/work`) with terminal-style project cards
+- Custom 404 page (`app/not-found.tsx`) in same terminal language
+- Reusable contact footer component with variant support
+- Local Aeonik Pro integration (`@font-face`) + mono code stack
 
 ## Documentation
 
-- Full rework notes: [`docs/landing-rework.md`](docs/landing-rework.md)
-- Aeonik font drop-in instructions: [`public/fonts/aeonik/README.md`](public/fonts/aeonik/README.md)
+- Full implementation + issue log: [`docs/landing-rework.md`](docs/landing-rework.md)
+- Aeonik font setup instructions: [`public/fonts/aeonik/README.md`](public/fonts/aeonik/README.md)
 
 ## Fonts
 
-UI text targets `Aeonik Pro` first. The project is preconfigured to load local font files from:
+UI text targets `Aeonik Pro` first and expects local files:
 
 - `public/fonts/aeonik/AeonikPro-Regular.woff2`
 - `public/fonts/aeonik/AeonikPro-Medium.woff2`
 - `public/fonts/aeonik/AeonikPro-Bold.woff2`
 
-Code/tag text uses a JetBrains Mono stack via CSS fallbacks.
+Code/tag text uses:
 
-## Local Development
+- `JetBrains Mono`
+- `IBM Plex Mono`
+- `SFMono-Regular`
+- `Menlo`
+
+## Development
 
 Install dependencies:
 
@@ -39,19 +42,19 @@ Install dependencies:
 npm install
 ```
 
-Run development server:
+Run dev server:
 
 ```bash
 npm run dev
 ```
 
-Run lint:
+Lint:
 
 ```bash
 npm run lint
 ```
 
-Run production build:
+Production build:
 
 ```bash
 npm run build
@@ -69,7 +72,13 @@ npm start
 app/
   globals.css
   layout.tsx
+  not-found.tsx
   page.tsx
+  work/
+    page.tsx
+components/
+  footer.tsx
+  start-project-contact.tsx
 docs/
   landing-rework.md
 public/
