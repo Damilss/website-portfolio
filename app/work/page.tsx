@@ -233,7 +233,7 @@ export default function WorkPage() {
             <div className="terminal-actions">
               <a
                 className="terminal-link mono"
-                href="https://github.com/Damilss/LLpersonalwebsite"
+                href="https://github.com/Damilss/lilianal.com"
                 target="_blank"
                 rel="noreferrer"
               >
