@@ -12,20 +12,22 @@ A Next.js App Router portfolio with a minimal, terminal-influenced visual system
 - Dedicated Work page (`/work`) with terminal-style project cards
 - Custom 404 page (`app/not-found.tsx`) in same terminal language
 - Reusable contact footer component with variant support
-- Local Aeonik Pro integration (`@font-face`) + mono code stack
+- Popular modern sans stack (`Manrope`/`Inter` + system fallbacks) + mono code stack
 
 ## Documentation
 
 - Full implementation + issue log: [`docs/landing-rework.md`](docs/landing-rework.md)
-- Aeonik font setup instructions: [`public/fonts/aeonik/README.md`](public/fonts/aeonik/README.md)
 
 ## Fonts
 
-UI text targets `Aeonik Pro` first and expects local files:
+UI text uses a common modern sans stack:
 
-- `public/fonts/aeonik/AeonikPro-Regular.woff2`
-- `public/fonts/aeonik/AeonikPro-Medium.woff2`
-- `public/fonts/aeonik/AeonikPro-Bold.woff2`
+- `Manrope`
+- `Inter`
+- `Avenir Next`
+- `Segoe UI`
+- `Helvetica Neue`
+- `Arial`
 
 Code/tag text uses:
 
@@ -82,8 +84,7 @@ components/
 docs/
   landing-rework.md
 public/
-  fonts/
-    aeonik/
+  ...
 ```
 
 ## License

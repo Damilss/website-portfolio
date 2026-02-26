@@ -1,35 +1,5 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: "Aeonik Pro";
-  src: local("Aeonik Pro"), local("AeonikPro-Regular"),
-    url("/fonts/aeonik/AeonikPro-Regular.woff2") format("woff2"),
-    url("/fonts/aeonik/AeonikPro-Regular.woff") format("woff");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Aeonik Pro";
-  src: local("Aeonik Pro Medium"), local("AeonikPro-Medium"),
-    url("/fonts/aeonik/AeonikPro-Medium.woff2") format("woff2"),
-    url("/fonts/aeonik/AeonikPro-Medium.woff") format("woff");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Aeonik Pro";
-  src: local("Aeonik Pro Bold"), local("AeonikPro-Bold"),
-    url("/fonts/aeonik/AeonikPro-Bold.woff2") format("woff2"),
-    url("/fonts/aeonik/AeonikPro-Bold.woff") format("woff");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
   --bg-base: #0b0f14;
   --surface: #0f1620;
@@ -43,8 +13,8 @@
   --accent-hover: #d8dde4;
   --accent-glow: rgba(183, 190, 201, 0.24);
 
-  --font-ui: "Aeonik Pro", "Aeonik", "Satoshi", "Avenir Next", "Segoe UI",
-    sans-serif;
+  --font-ui: "Manrope", "Inter", "Avenir Next", "Segoe UI", "Helvetica Neue",
+    Arial, sans-serif;
   --font-code: "JetBrains Mono", "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
 
   --micro: 160ms;
