@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Emilio Berndt | Creative Developer",
+  title: "Emilio Scott | Creative Developer",
   description:
     "Personal portfolio focused on minimal interfaces, strong interaction design, and modern frontend systems.",
 };
