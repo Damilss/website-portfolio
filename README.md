@@ -1,65 +1,37 @@
-# Emilio Ledesma — Software Developer Portfolio
+# Website Portfolio
 
-Professional portfolio website showcasing software engineering projects, technical skills, and applied computer science knowledge.
+A Next.js App Router portfolio with a minimal, interactive single-page landing experience.
 
-🌐 **Live Site:** https://emilioledesma.com
+## Current Implementation
 
----
+- Full landing-page rework (`app/page.tsx`) with:
+  - Hero block (headline, short positioning copy, CTA actions)
+  - Selected work list with tags/years
+  - Social links footer area
+- Custom global design system in `app/globals.css`:
+  - Dark grayscale palette
+  - Local typography stacks
+  - Shared motion timing and easing tokens
+  - Hover/focus interaction styling
+  - Reduced-motion support
+- Root layout metadata in `app/layout.tsx`
 
-## 👨‍💻 About
+## Documentation
 
-I am a computer engineer focused on AI/ML and low level systems. This portfolio serves as a centralized platform to demonstrate my technical abilities, problem-solving approach, and project experience as I develop my skills through the next 4 years of college
+- Full rework notes: [`docs/landing-rework.md`](docs/landing-rework.md)
+- Aeonik font drop-in instructions: [`public/fonts/aeonik/README.md`](public/fonts/aeonik/README.md)
 
-This portfolio is actively maintained and evolves alongside my technical growth.
+## Fonts
 
----
+UI text targets `Aeonik Pro` first. The project is preconfigured to load local font files from:
 
-## 🧠 Technical Skills
+- `public/fonts/aeonik/AeonikPro-Regular.woff2`
+- `public/fonts/aeonik/AeonikPro-Medium.woff2`
+- `public/fonts/aeonik/AeonikPro-Bold.woff2`
 
-### Languages
-- TypeScript
-- JavaScript
-- Python
+Code/tag text uses a JetBrains Mono stack via CSS fallbacks.
 
-### Frameworks & Libraries
-- Next.js (App Router)
-- React
-- Tailwind CSS
-
-### Core Concepts
-- Component-driven architecture
-- Responsive UI design
-- Performance optimization
-- Git-based version control
-
-### Tooling
-- ESLint
-- Prettier
-- npm
-- Vercel deployment
-
----
-
-## 🏗 Architecture & Structure
-
-```
-src/
-  app/
-    page.tsx
-    layout.tsx
-  components/
-  lib/
-  styles/
-```
-
-- **App Router** for modern routing patterns  
-- **Reusable components** for maintainability  
-- **Utility modules** for separation of concerns  
-- Structured for scalability and future feature expansion (blog, backend integration, etc.)
-
----
-
-## 🚀 Development
+## Local Development
 
 Install dependencies:
 
@@ -67,52 +39,44 @@ Install dependencies:
 npm install
 ```
 
-Run locally:
+Run development server:
 
 ```bash
 npm run dev
 ```
 
-Production build:
+Run lint:
+
+```bash
+npm run lint
+```
+
+Run production build:
 
 ```bash
 npm run build
+```
+
+Start production server:
+
+```bash
 npm start
 ```
 
----
+## Project Structure
 
-## 📂 Featured Sections
+```text
+app/
+  globals.css
+  layout.tsx
+  page.tsx
+docs/
+  landing-rework.md
+public/
+  fonts/
+    aeonik/
+```
 
-- About Me
-- Projects Showcase
-- Technical Skills
-- Contact Information
-- Resume Integration
+## License
 
----
-
-## 🎯 Professional Objective
-
-Seeking internship and entry-level software engineering opportunities where I can:
-
-- Contribute to real-world production systems
-- Strengthen full-stack development skills
-- Collaborate within professional engineering teams
-- Continue advancing my computer science foundation
-
----
-
-## 📬 Contact
-
-
-- [LinkedIn](https://www.linkedin.com/company/cloudflare/jobs/)
-
-- [School Email](mailto:escott15@calpoly.edu)
- - [Personal Email](mailto:milii76@outlook.com)
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
+MIT (see `LICENSE`).
