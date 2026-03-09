@@ -29,18 +29,14 @@ const projects = [
   },
   {
     id: "03",
-    slug: "swoosh-analytics",
-    name: "swoosh analytics",
-    year: "dec 2025",
+    slug: "firefly",
+    name: "firefly",
+    year: "mar",
     tags: [
-      "Python",
-      "Pandas",
-      "NumPy",
-      "Sckit-learn",
-      "MatPlotLib",
-      "Xgboost || Lightgbm",
+      "Expo",
+      "TO BE DETERMINED"
     ],
-    href: "/work#swoosh-analytics",
+    href: "/work#firefly",
   },
   {
     id: "04",

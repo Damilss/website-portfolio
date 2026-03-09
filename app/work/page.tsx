@@ -130,10 +130,46 @@ export default function WorkPage() {
             </div>
           </li>
 
-          {/* Project 04 */}
-          <li id="energy-usage-pattern-exploration" className="terminal-project-card">
+           {/* Project 04 */}
+          <li id="firefly" className="terminal-project-card">
             <header className="terminal-project-head">
               <span className="terminal-project-index mono">04</span>
+              <h2>firefly</h2>
+              <span className="terminal-status mono terminal-status-shipping">
+                shipping
+              </span>
+            </header>
+
+            <p className="terminal-summary">
+              a ML analysis pipeline built to analyze and give firefighters and other first-responders 
+              a real time eagle-eye view of areas prone to fire through drone photo and video.
+            </p>
+
+            <div className="terminal-meta-row">
+              <p className="mono">year: mar 2026</p>
+              <p className="mono">stack:</p>
+              <ul className="terminal-stack" aria-label="Headless CMS Delivery Engine stack">
+                <li className="mono">Expo</li>
+                <li className="mono">TBD</li>
+              </ul>
+            </div>
+
+            <div className="terminal-actions">
+              <a
+                className="terminal-link mono"
+                href="https://firefly-demo-page.vercel.app/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                open_live
+              </a>
+            </div>
+          </li>
+
+          {/* Project 05 */}
+          <li id="energy-usage-pattern-exploration" className="terminal-project-card">
+            <header className="terminal-project-head">
+              <span className="terminal-project-index mono">05</span>
               <h2>energy usage pattern exploration</h2>
               <span className="terminal-status mono terminal-status-archived">
                 archived
@@ -168,10 +204,10 @@ export default function WorkPage() {
             </div>
           </li>
 
-          {/* Project 05 */}
+          {/* Project 06 */}
           <li id="instagram-follower-analyzer" className="terminal-project-card">
             <header className="terminal-project-head">
-              <span className="terminal-project-index mono">05</span>
+              <span className="terminal-project-index mono">06</span>
               <h2>instagram follower analyzer</h2>
               <span className="terminal-status mono terminal-status-archived">
                 archived
@@ -205,10 +241,10 @@ export default function WorkPage() {
             </div>
           </li>
 
-          {/* Project 06 */}
+          {/* Project 07 */}
           <li id="lilianal-com" className="terminal-project-card">
             <header className="terminal-project-head">
-              <span className="terminal-project-index mono">06</span>
+              <span className="terminal-project-index mono">07</span>
               <h2>lilianal.com</h2>
               <span className="terminal-status mono terminal-status-active">
                 active
