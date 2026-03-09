@@ -58,14 +58,6 @@ const projects = [
     tags: ["Python", ".JSON"],
     href: "/work#instagram-follower-analyzer",
   },
-  {
-    id: "06",
-    slug: "lilianal-com",
-    name: "lilianal.com",
-    year: "feb 2025",
-    tags: ["Next.js", "Tailwind CSS", "Vercel"],
-    href: "/work#lilianal-com",
-  },
 ];
 
 export default function Home() {
