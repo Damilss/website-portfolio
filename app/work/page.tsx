@@ -75,7 +75,7 @@ export default function WorkPage() {
             {/* Project 02 */}
           <li id="devsize-plus" className="terminal-project-card">
             <header className="terminal-project-head">
-              <span className="terminal-project-index mono">04</span>
+              <span className="terminal-project-index mono">02</span>
               <h2>devsize-plus</h2>
               <span className="terminal-status mono terminal-status-shipping">
                 shipping

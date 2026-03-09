@@ -34,7 +34,7 @@ const projects = [
     id: "03",
     slug: "firefly",
     name: "firefly",
-    year: "mar",
+    year: "mar 2026",
     tags: [
       "Expo",
       "TO BE DETERMINED"
