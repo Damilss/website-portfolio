@@ -21,10 +21,13 @@ const projects = [
   },
   {
     id: "02",
-    slug: "cortex",
-    name: "cortex",
-    year: "feb 2026",
-    tags: ["TO BE DETERMINED"],
+    slug: "devsize-plus",
+    name: "devsize-plus",
+    year: "mar 2026",
+    tags: [
+      "Swift",
+      "SwiftUI"
+    ],
     href: "/work#cortex",
   },
   {

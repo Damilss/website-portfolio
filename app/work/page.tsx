@@ -72,31 +72,40 @@ export default function WorkPage() {
             </div>
           </li>
 
-          {/* Project 02 */}
-          <li id="cortex" className="terminal-project-card">
+            {/* Project 02 */}
+          <li id="devsize-plus" className="terminal-project-card">
             <header className="terminal-project-head">
-              <span className="terminal-project-index mono">02</span>
-              <h2>cortex</h2>
+              <span className="terminal-project-index mono">04</span>
+              <h2>devsize-plus</h2>
               <span className="terminal-status mono terminal-status-shipping">
                 shipping
               </span>
             </header>
 
             <p className="terminal-summary">
-              a machine learning–driven mobile app that analyzes patient movement 
-              through on-device motion tracking and delivers real-time corrective 
-              feedback for prescribed physical therapy exercises.
+              a macos, client-only disk usage explorer (TreeSize-style) 
+              that scans a folder and shows where space is going. built to be native and fast: 
+              Swift + SwiftUI + Swift concurrency, no servers, no database.
             </p>
 
             <div className="terminal-meta-row">
-              <p className="mono">year: feb 2026</p>
+              <p className="mono">year: mar 2026</p>
               <p className="mono">stack:</p>
-              <ul
-                className="terminal-stack"
-                aria-label="Streaming QA Automation Console stack"
-              >
-                <li className="mono">TO BE DETERMINED</li>
+              <ul className="terminal-stack" aria-label="Headless CMS Delivery Engine stack">
+                <li className="mono">Swift</li>
+                <li className="mono">SwiftUI</li>
               </ul>
+            </div>
+
+            <div className="terminal-actions">
+              <a
+                className="terminal-link mono"
+                href="https://github.com/Damilss/devsize-plus"
+                target="_blank"
+                rel="noreferrer"
+              >
+                open_repo
+              </a>
             </div>
           </li>
 
@@ -149,8 +158,8 @@ export default function WorkPage() {
               <p className="mono">year: mar 2026</p>
               <p className="mono">stack:</p>
               <ul className="terminal-stack" aria-label="Headless CMS Delivery Engine stack">
-                <li className="mono">Expo</li>
-                <li className="mono">TBD</li>
+                <li className="mono">expo</li>
+                <li className="mono">TO BE DETERMINED</li>
               </ul>
             </div>
 
