@@ -28,18 +28,18 @@ const projects = [
       "Swift",
       "SwiftUI"
     ],
-    href: "/work#cortex",
+    href: "/work#devsize-plus",
   },
   {
     id: "03",
-    slug: "firefly",
-    name: "firefly",
-    year: "mar 2026",
+    slug: "westcoastbeautyco",
+    name: "westcoastbeautyco",
+    year: "feb 2026",
     tags: [
-      "Expo",
-      "TO BE DETERMINED"
+      "Next.JS",
+      "Behold"
     ],
-    href: "/work#firefly",
+    href: "/work#westcoastbeautyco",
   },
   {
     id: "04",
@@ -80,7 +80,7 @@ export default function Home() {
         </div>
 
         <p className="hero-copy">
-          I build intelligent and high-performance software systems, focusing on machine learning, 
+          Building intelligent and high-performance software systems, focusing on machine learning, 
           low-level optimization, and scalable architecture, with experience across the full stack.
         </p>
 
