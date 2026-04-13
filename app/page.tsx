@@ -80,8 +80,8 @@ export default function Home() {
         </div>
 
         <p className="hero-copy">
-          Building intelligent and high-performance software systems, focusing on machine learning, 
-          low-level optimization, and scalable architecture, with experience across the full stack.
+          Building software systems, focusing on cyber security, and
+          low-level optimization, all while learning across the full stack.
         </p>
 
         <div className="hero-actions">
