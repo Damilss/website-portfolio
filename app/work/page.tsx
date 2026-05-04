@@ -18,7 +18,7 @@ export default function WorkPage() {
         </Link>
       </header>
 
-      <section className="terminal-panel" aria-label="Projects terminal panel">
+      <section className="terminal-panel" aria-label="Work terminal panel">
         <div className="terminal-topbar">
           <div className="terminal-dots" aria-hidden="true">
             <span />
@@ -28,8 +28,7 @@ export default function WorkPage() {
           <p className="terminal-path mono">emilio@portfolio:~/work</p>
         </div>
 
-        <p className="terminal-command mono">$ ls -la ./projects</p>
-
+        <p className="terminal-command mono">$ ls -la ./work</p>
 
         <ol className="terminal-projects">
           {/* Project 01 */}
@@ -83,8 +82,8 @@ export default function WorkPage() {
             </header>
 
             <p className="terminal-summary">
-              a macos, client-only disk usage explorer (TreeSize-style) 
-              that scans a folder and shows where space is going. built to be native and fast: 
+              a macos, client-only disk usage explorer (TreeSize-style)
+              that scans a folder and shows where space is going. built to be native and fast:
               Swift + SwiftUI + Swift concurrency, no servers, no database.
             </p>
 
@@ -120,8 +119,8 @@ export default function WorkPage() {
             </header>
 
             <p className="terminal-summary">
-              a python-based machine learning project that 
-              leverages historical nba game data to engineer performance features and train gradient 
+              a python-based machine learning project that
+              leverages historical nba game data to engineer performance features and train gradient
               boosted models for game outcome prediction and edge analysis.
             </p>
 
@@ -150,8 +149,8 @@ export default function WorkPage() {
             </header>
 
             <p className="terminal-summary">
-              a data analysis pipeline built with pandas that processes 70,000+ household 
-              energy records, performing feature-level analysis and visualization to uncover consumption trends across temporal 
+              a data analysis pipeline built with pandas that processes 70,000+ household
+              energy records, performing feature-level analysis and visualization to uncover consumption trends across temporal
               and environmental variables.
             </p>
 
@@ -188,11 +187,11 @@ export default function WorkPage() {
             </header>
 
             <p className="terminal-summary">
-              a Python script that processes 
+              a Python script that processes
               structured JSON data from instagram account exports to compute
               follower/following set differences and identify non-reciprocal connections.
             </p>
-          
+
             <div className="terminal-meta-row">
               <p className="mono">year: jan 2026</p>
               <p className="mono">stack:</p>
@@ -225,7 +224,7 @@ export default function WorkPage() {
             </header>
 
             <p className="terminal-summary">
-              Designed and deployed a custom website for individual clients using Next.js, 
+              Designed and deployed a custom website for individual clients using Next.js,
               focusing on responsive design and scalable frontend architecture.
             </p>
 
@@ -250,12 +249,104 @@ export default function WorkPage() {
               </a>
               <a
                 className="terminal-link mono"
-                href="https://lilianal.com" 
+                href="https://lilianal.com"
                 target="_blank"
                 rel="noreferrer"
               >
                 open_live
               </a>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section className="terminal-panel" aria-label="Passion terminal panel">
+        <div className="terminal-topbar">
+          <div className="terminal-dots" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+          </div>
+          <p className="terminal-path mono">emilio@portfolio:~/passion</p>
+        </div>
+
+        <p className="terminal-command mono">$ ls -la ./passion</p>
+
+        <ol className="terminal-projects">
+          {/* Passion Project 01 */}
+          <li id="westcoastbeautyco" className="terminal-project-card">
+            <header className="terminal-project-head">
+              <span className="terminal-project-index mono">01</span>
+              <h2>westcoastbeautyco</h2>
+              <span className="terminal-status mono terminal-status-active">
+                active
+              </span>
+            </header>
+
+            <p className="terminal-summary">
+              A beauty brand website built with Next.js, Tailwind CSS, and Vercel.
+            </p>
+
+            <div className="terminal-meta-row">
+              <p className="mono">year: 2024</p>
+              <p className="mono">stack:</p>
+              <ul className="terminal-stack" aria-label="westcoastbeautyco stack">
+                <li className="mono">Next.js</li>
+                <li className="mono">Tailwind CSS</li>
+                <li className="mono">Vercel</li>
+              </ul>
+            </div>
+
+            <div className="terminal-actions">
+              <a
+                className="terminal-link mono"
+                href="https://westcoastbeautyco.com"
+                target="_blank"
+                rel="noreferrer"
+              >
+                open_live
+              </a>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section className="terminal-panel" aria-label="School terminal panel">
+        <div className="terminal-topbar">
+          <div className="terminal-dots" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+          </div>
+          <p className="terminal-path mono">emilio@portfolio:~/school</p>
+        </div>
+
+        <p className="terminal-command mono">$ ls -la ./school</p>
+
+        <ol className="terminal-projects">
+          {/* School Project 01 */}
+          <li id="calpoly-slo" className="terminal-project-card">
+            <header className="terminal-project-head">
+              <span className="terminal-project-index mono">01</span>
+              <h2>calpoly slo</h2>
+              <span className="terminal-status mono terminal-status-active">
+                active
+              </span>
+            </header>
+
+            <p className="terminal-summary">
+              Cal Poly San Luis Obispo - Computer Science Program
+            </p>
+
+            <div className="terminal-meta-row">
+              <p className="mono">year: 2024 - 2026</p>
+              <p className="mono">stack:</p>
+              <ul className="terminal-stack" aria-label="Cal Poly stack">
+                <li className="mono">Computer Science</li>
+                <li className="mono">Software Engineering</li>
+                <li className="mono">Data Structures</li>
+                <li className="mono">Algorithms</li>
+              </ul>
             </div>
           </li>
         </ol>
