@@ -34,10 +34,11 @@ const projects = [
     id: "03",
     slug: "westcoastbeautyco",
     name: "westcoastbeautyco",
-    year: "feb 2026",
+    year: "2024",
     tags: [
-      "Next.JS",
-      "Behold"
+      "Next.js",
+      "Tailwind CSS",
+      "Vercel",
     ],
     href: "/work#westcoastbeautyco",
   },
