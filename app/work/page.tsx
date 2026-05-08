@@ -13,9 +13,14 @@ export default function WorkPage() {
         <p className="work-page-copy">
           A focused archive for projects I have shipped or am actively building.
         </p>
-        <Link className="work-back-link mono" href="/">
-          cd .. /home
-        </Link>
+        <div className="work-nav-row">
+          <Link className="work-back-link mono" href="/">
+            cd .. /home
+          </Link>
+          <a className="work-back-link mono" href="#mustang-market">./work</a>
+          <a className="work-back-link mono" href="#westcoastbeautyco">./passion</a>
+          <a className="work-back-link mono" href="#calpoly-slo">./school</a>
+        </div>
       </header>
 
       <section className="terminal-panel" aria-label="Work terminal panel">
