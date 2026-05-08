@@ -18,7 +18,7 @@ type Props = {
 };
 
 export default function ProjectModal({ project, onClose }: Props) {
-  // scroll to top when modal opens
+  // scroll to top when modal opens so window is visible
   useEffect(() => {
     if (!project) return;
     window.scrollTo({ top: 0, behavior: "smooth" });
