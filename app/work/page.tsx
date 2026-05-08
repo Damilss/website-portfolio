@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
 import Footer from "@/components/footer";
 import ProjectModal, { type ProjectData } from "@/components/project-modal";
@@ -8,6 +8,26 @@ import ProjectModal, { type ProjectData } from "@/components/project-modal";
 export default function WorkPage() {
   const [active, setActive] = useState<ProjectData | null>(null);
   const close = useCallback(() => setActive(null), []);
+
+  useEffect(() => {
+    // sessionStorage path: set by home page link click (no hash in URL, so Next.js won't override)
+    const pending = sessionStorage.getItem("pendingScroll");
+    if (pending) {
+      sessionStorage.removeItem("pendingScroll");
+      const timer = setTimeout(() => {
+        document.getElementById(pending)?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 80);
+      return () => clearTimeout(timer);
+    }
+
+    // Fallback: direct URL hash navigation (e.g. typed URL or refresh)
+    const hash = window.location.hash.slice(1);
+    if (!hash) return;
+    const timer = setTimeout(() => {
+      document.getElementById(hash)?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <main className="work-page-shell">
@@ -26,9 +46,9 @@ export default function WorkPage() {
           <Link className="work-back-link mono" href="/">
             cd .. /home
           </Link>
-          <a className="work-back-link mono" href="#mustang-market">./passion</a>
-          <a className="work-back-link mono" href="#lilianal-com">./work</a>
-          <a className="work-back-link mono" href="#calpoly-slo">./school</a>
+          <button className="work-back-link mono" onClick={() => document.getElementById("mustang-market")?.scrollIntoView({ behavior: "smooth", block: "center" })}>./passion</button>
+          <button className="work-back-link mono" onClick={() => document.getElementById("lilianal-com")?.scrollIntoView({ behavior: "smooth", block: "center" })}>./work</button>
+          <button className="work-back-link mono" onClick={() => document.getElementById("calpoly-slo")?.scrollIntoView({ behavior: "smooth", block: "center" })}>./school</button>
         </div>
       </header>
 
