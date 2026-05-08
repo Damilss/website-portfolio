@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Footer from "@/components/footer";
 import StartProjectContact from "@/components/start-project-contact";
+import WorkProjectLink from "@/components/work-project-link";
 
 const projects = [
   {
@@ -99,7 +100,7 @@ export default function Home() {
           <ol className="work-list">
             {projects.map((project) => (
               <li key={project.id}>
-                <Link className="work-row" href={project.href}>
+                <WorkProjectLink slug={project.slug} className="work-row">
                   <span className="work-index mono">{project.id}</span>
 
                   <div className="work-content">
@@ -114,7 +115,7 @@ export default function Home() {
                   </div>
 
                   <span className="work-year mono">{project.year}</span>
-                </Link>
+                </WorkProjectLink>
               </li>
             ))}
           </ol>
