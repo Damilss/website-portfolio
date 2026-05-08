@@ -948,8 +948,9 @@ a {
   inset: 0;
   z-index: 100;
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   padding: clamp(1rem, 2vw, 1.5rem) clamp(1rem, 4vw, 3rem);
   background: rgba(7, 10, 14, 0.12);
   backdrop-filter: blur(3px);
@@ -959,14 +960,13 @@ a {
 
 .pm-window {
   width: min(100%, 64rem);
-  max-height: 90svh;
-  overflow-y: auto;
+  flex-shrink: 0;
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 1.1rem;
   background: var(--surface);
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.04) inset,
-    0 32px 64px -24px rgba(0, 0, 0, 0.15);
+    0 32px 64px -24px rgba(0, 0, 0, 0.3);
   animation: pm-window-in 300ms var(--ease-smooth) both;
 }
 
