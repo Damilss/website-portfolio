@@ -22,7 +22,7 @@ export default function StartProjectContact() {
     <div className="start-project-wrap">
       <button
         type="button"
-        className="cta-secondary start-project-trigger"
+        className="cta-primary start-project-trigger"
         onClick={() => setIsOpen((state) => !state)}
         aria-expanded={isOpen}
         aria-controls="start-project-panel"
