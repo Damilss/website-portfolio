@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 
 export type ProjectData = {
+  id: string;
   title: string;
   year: string;
   status: "active" | "shipping" | "archived";
@@ -17,14 +18,33 @@ type Props = {
 };
 
 export default function ProjectModal({ project, onClose }: Props) {
+  // scroll to top when modal opens
+  useEffect(() => {
+    if (!project) return;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [project]);
+
+  // ESC key → close and return to card anchor
   useEffect(() => {
     if (!project) return;
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") handleClose();
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [project, onClose]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [project]);
+
+  function handleClose() {
+    const id = project?.id;
+    onClose();
+    if (id) {
+      // wait one tick for the modal to unmount, then scroll to card
+      requestAnimationFrame(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    }
+  }
 
   if (!project) return null;
 
@@ -33,15 +53,12 @@ export default function ProjectModal({ project, onClose }: Props) {
   return (
     <div
       className="pm-overlay"
-      onClick={onClose}
+      onClick={handleClose}
       role="dialog"
       aria-modal="true"
       aria-label={project.title}
     >
-      <div
-        className="pm-window"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="pm-window" onClick={(e) => e.stopPropagation()}>
         {/* topbar */}
         <div className="pm-topbar">
           <div className="terminal-dots" aria-hidden="true">
@@ -52,7 +69,7 @@ export default function ProjectModal({ project, onClose }: Props) {
           <p className="pm-path mono">emilio@portfolio:~/{slug}</p>
           <button
             className="pm-close mono"
-            onClick={onClose}
+            onClick={handleClose}
             aria-label="Close"
           >
             esc

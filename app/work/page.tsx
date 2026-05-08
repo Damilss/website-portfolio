@@ -50,6 +50,7 @@ export default function WorkPage() {
             id="mustang-market"
             className="terminal-project-card pm-trigger"
             onClick={() => setActive({
+              id: "mustang-market",
               title: "mustang market",
               year: "jan 2026",
               status: "active",
@@ -89,6 +90,7 @@ export default function WorkPage() {
             id="devsize-plus"
             className="terminal-project-card pm-trigger"
             onClick={() => setActive({
+              id: "devsize-plus",
               title: "devsize-plus",
               year: "mar 2026",
               status: "shipping",
@@ -125,6 +127,7 @@ export default function WorkPage() {
             id="swoosh-analytics"
             className="terminal-project-card pm-trigger"
             onClick={() => setActive({
+              id: "swoosh-analytics",
               title: "swoosh analytics",
               year: "dec 2025",
               status: "shipping",
@@ -161,6 +164,7 @@ export default function WorkPage() {
             id="energy-usage-pattern-exploration"
             className="terminal-project-card pm-trigger"
             onClick={() => setActive({
+              id: "energy-usage-pattern-exploration",
               title: "energy usage pattern exploration",
               year: "dec 2025",
               status: "archived",
@@ -198,6 +202,7 @@ export default function WorkPage() {
             id="instagram-follower-analyzer"
             className="terminal-project-card pm-trigger"
             onClick={() => setActive({
+              id: "instagram-follower-analyzer",
               title: "instagram follower analyzer",
               year: "jan 2026",
               status: "archived",
@@ -249,6 +254,7 @@ export default function WorkPage() {
             id="lilianal-com"
             className="terminal-project-card pm-trigger"
             onClick={() => setActive({
+              id: "lilianal-com",
               title: "lilianal.com",
               year: "feb 2025",
               status: "active",
@@ -289,6 +295,7 @@ export default function WorkPage() {
             id="westcoastbeautyco"
             className="terminal-project-card pm-trigger"
             onClick={() => setActive({
+              id: "westcoastbeautyco",
               title: "westcoastbeautyco",
               year: "2024",
               status: "active",
@@ -339,6 +346,7 @@ export default function WorkPage() {
             id="calpoly-slo"
             className="terminal-project-card pm-trigger"
             onClick={() => setActive({
+              id: "calpoly-slo",
               title: "calpoly slo",
               year: "2024 - 2026",
               status: "active",
