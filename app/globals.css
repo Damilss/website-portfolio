@@ -952,7 +952,7 @@ a {
   justify-content: center;
   padding: clamp(1rem, 4vw, 2rem);
   background: rgba(7, 10, 14, 0.12);
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(3px);
   animation: pm-overlay-in 200ms var(--ease-smooth) both;
 }
 
@@ -962,11 +962,10 @@ a {
   overflow-y: auto;
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 1.1rem;
-  background: rgba(15, 22, 32, 0.18);
-  backdrop-filter: blur(40px) saturate(1.2);
+  background: var(--surface);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
-    0 32px 64px -24px rgba(0, 0, 0, 0.3);
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 32px 64px -24px rgba(0, 0, 0, 0.15);
   animation: pm-window-in 300ms var(--ease-smooth) both;
 }
 
