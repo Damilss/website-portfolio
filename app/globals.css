@@ -1,51 +1,137 @@
+/* =============================================================================
+   globals.css — the entire design system for this portfolio.
+   -----------------------------------------------------------------------------
+   Loaded once via app/layout.tsx ("import './globals.css'"), so every rule here
+   applies site-wide. There are no per-component CSS files — class names used in
+   /app and /components are all defined below.
+
+   Reading order (top → bottom):
+     1.  Tailwind v4 import + design tokens on :root (color, motion, fonts).
+     2.  @theme inline shim that exposes our tokens to Tailwind utilities.
+     3.  Base resets and body styles.
+     4.  Home-page shell (.portfolio-shell) + ambient/noise background layers.
+     5.  Hero block (title row, copy, CTAs, "Start a Project" reveal chip).
+     6.  Selected Work list (.footer-grid, .work-row, etc.).
+     7.  Misc utilities (.mono, .social-links).
+     8.  /work page chrome (.work-page-shell, .work-page-header, nav row).
+     9.  Terminal panels (.terminal-panel and friends — used by /work, /404,
+         and the GitHub panel).
+     10. Project cards (.terminal-project-card, status pills, stack chips, etc.).
+     11. Contact footer (.contact-footer + .contact-footer-corner variant).
+     12. /404 (.not-found-shell, .terminal-not-found-*).
+     13. Focus-visible outline.
+     14. Mobile breakpoint (max-width: 860px).
+     15. page-enter keyframes (used by the page shells on mount).
+     16. Project modal (overlay, window, body — opens from /work cards).
+     17. Hero side-by-side row + GitHub panel (graph + cursor blink).
+
+   Intent / source of truth: docs/landing-rework.md documents the design rationale
+   (color tokens, motion timings, the corner-footer alignment contract on home,
+   and why /work cards are hand-authored instead of mapped). Read that before
+   bigger visual changes.
+============================================================================= */
+
+/* Tailwind v4 — single-line import is all that's needed. The PostCSS plugin
+   (@tailwindcss/postcss, see package.json) processes utilities at build time. */
 @import "tailwindcss";
 
+/* -----------------------------------------------------------------------------
+   Design tokens — CSS custom properties on :root.
+   Every visual property in the rest of the file should ultimately reference
+   one of these (color, motion, font). Editing a token cascades site-wide.
+----------------------------------------------------------------------------- */
 :root {
+  /* --- Surfaces -------------------------------------------------------------
+     Three layers of dark, low-contrast surfaces:
+       --bg-base   = the page background.
+       --surface   = card / panel surface (slightly lighter than the bg).
+       --border    = the universal hairline border (2 levels of contrast on
+                     dark = enough). Uses rgba so it composites cleanly over
+                     any of the surfaces above. */
   --bg-base: #0b0f14;
   --surface: #0f1620;
   --border: rgba(255, 255, 255, 0.06);
 
+  /* --- Text ----------------------------------------------------------------
+     Three text-opacity tiers, all white-on-dark. Lower opacity = lower
+     visual weight (used for labels, captions, archival projects). */
   --text-primary: rgba(255, 255, 255, 0.92);
   --text-secondary: rgba(255, 255, 255, 0.68);
   --text-muted: rgba(255, 255, 255, 0.48);
 
+  /* --- Accent --------------------------------------------------------------
+     Cool gray accent used for hover glows and active borders. Not a saturated
+     color on purpose — keeps the palette monochromatic. The `accent-glow`
+     is the same hue at low alpha for box-shadow halos. */
   --accent: #b7bec9;
   --accent-hover: #d8dde4;
   --accent-glow: rgba(183, 190, 201, 0.24);
 
+  /* --- Fonts ---------------------------------------------------------------
+     UI font stack = Manrope first; long fallback chain for systems that
+     don't have it. Code/mono stack used for everything in the terminal motif
+     (paths, prompts, status pills, tag chips). */
   --font-ui: "Manrope", "Inter", "Avenir Next", "Segoe UI", "Helvetica Neue",
     Arial, sans-serif;
   --font-code: "JetBrains Mono", "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
 
+  /* --- Motion --------------------------------------------------------------
+     Three duration tiers + two easings. Use --micro for hover states,
+     --ui for layout-affecting transitions, --page for entrance animations.
+       --ease-smooth   = soft start, soft end (feels organic).
+       --ease-standard = Material-style (snappier, good for layout). */
   --micro: 160ms;
   --ui: 280ms;
   --page: 460ms;
   --ease-smooth: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
 
+  /* --- Composed surfaces ---------------------------------------------------
+     Pre-mixed tokens for terminal-themed components. color-mix lets us derive
+     a translucent surface from --surface without hard-coding a second color.
+       --terminal-frame = the outer panel surface (88% opacity).
+       --terminal-card  = a slightly more transparent card surface (78%).
+     Both composite over the page bg + ambient/noise layers underneath. */
   --terminal-frame: color-mix(in srgb, var(--surface) 88%, transparent);
   --terminal-card: color-mix(in srgb, var(--surface) 78%, transparent);
 }
 
+/* Tailwind v4 inline theme — exposes our tokens as Tailwind theme values so
+   utilities like `bg-background` / `text-foreground` resolve to our colors.
+   Currently we only map the two essentials; extend here if more utilities
+   need access to design tokens. */
 @theme inline {
   --color-background: var(--bg-base);
   --color-foreground: var(--text-primary);
 }
 
+/* -----------------------------------------------------------------------------
+   Base resets.
+----------------------------------------------------------------------------- */
+
+/* Universal box-sizing — every element calculates dimensions including its
+   padding/border. Standard reset. */
 * {
   box-sizing: border-box;
 }
 
+/* Kill default body margin and ensure the page can grow to viewport height. */
 html,
 body {
   margin: 0;
   min-height: 100%;
 }
 
+/* Smooth scroll for any in-page anchor jumps (also picked up by JS-triggered
+   scrollIntoView when behavior:'smooth' is requested). */
 html {
   scroll-behavior: smooth;
 }
 
+/* Body defaults — page color + base typography. -webkit-font-smoothing is
+   the WebKit-specific antialiasing toggle (matches the `antialiased` class
+   on <body> in app/layout.tsx). text-rendering: optimizeLegibility hints
+   to the browser to enable kerning/ligatures. */
 body {
   background: var(--bg-base);
   color: var(--text-primary);
@@ -54,32 +140,50 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Strip default link styling site-wide; individual link classes (.terminal-link,
+   .work-back-link, etc.) opt in to their own visuals. */
 a {
   color: inherit;
   text-decoration: none;
 }
 
+/* =============================================================================
+   HOME PAGE SHELL (.portfolio-shell)
+   The outer wrapper for app/page.tsx. Sets up a flex column that pushes the
+   Selected Work list toward the bottom, and the page-enter animation.
+============================================================================= */
 .portfolio-shell {
   position: relative;
-  isolation: isolate;
-  min-height: 100svh;
-  overflow: hidden;
+  isolation: isolate;          /* establishes a stacking context for ambient/noise z-index. */
+  min-height: 100svh;          /* svh = small viewport height (avoids mobile URL-bar jump). */
+  overflow: hidden;            /* clip the ambient gradient corners. */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  /* clamp() responsive gap: scales with viewport but bounded between 3rem–5rem. */
   gap: clamp(3rem, 7vw, 5rem);
   padding: clamp(1.25rem, 2vw, 2rem) clamp(1.1rem, 4vw, 3rem)
     clamp(1.2rem, 3vw, 2.25rem);
+  /* Page entrance animation — see @keyframes page-enter below. `both` keeps
+     the from-state applied before the animation fires (no flash). */
   animation: page-enter var(--page) var(--ease-smooth) both;
 }
 
+/* -----------------------------------------------------------------------------
+   Background layers — the soft gradient glow + film grain texture that sit
+   behind every page. Both are aria-hidden in JSX. They share absolute
+   positioning rules but differ in z-index and visual treatment.
+----------------------------------------------------------------------------- */
 .ambient-layer,
 .noise-layer {
   position: absolute;
-  inset: 0;
-  pointer-events: none;
+  inset: 0;                    /* shorthand for top/right/bottom/left: 0. */
+  pointer-events: none;        /* never intercept clicks — they're decorative. */
 }
 
+/* Ambient: two radial-gradient highlights (top-left + bottom-right) layered
+   over a subtle linear gradient background. Creates depth without committing
+   to a strong tint. */
 .ambient-layer {
   z-index: -2;
   background: radial-gradient(
@@ -95,6 +199,8 @@ a {
     linear-gradient(160deg, #0b0f14, #10141b 60%, #0b0f14);
 }
 
+/* Noise: faux film-grain via a tiny dot pattern, blended with `soft-light`
+   so it modulates surfaces beneath it instead of stacking on top. */
 .noise-layer {
   z-index: -1;
   opacity: 0.08;
@@ -103,10 +209,18 @@ a {
   mix-blend-mode: soft-light;
 }
 
+/* =============================================================================
+   HERO BLOCK — top section of app/page.tsx (name, tagline, CTAs).
+============================================================================= */
+
 .hero-block {
   width: 100%;
 }
 
+/* Title row: hero copy on the left, corner-Footer on the right.
+   IMPORTANT: docs/landing-rework.md calls this the "Home corner-footer
+   alignment contract" — the Footer's top edge MUST align to the hero label
+   baseline. align-items: flex-start is what makes that work. */
 .hero-title-row {
   display: flex;
   align-items: flex-start;
@@ -114,11 +228,15 @@ a {
   gap: clamp(1rem, 2.8vw, 2.4rem);
 }
 
+/* Constrain copy width independently of the row's flex behavior.
+   min-width: 0 lets it shrink past content size in a flex parent (otherwise
+   long words push the corner Footer off the right edge). */
 .hero-title-copy {
   max-width: 72ch;
   min-width: 0;
 }
 
+/* Small uppercase eyebrow label above the h1 ("B.S Computer Engineering..."). */
 .hero-label {
   margin: 0;
   color: var(--text-muted);
@@ -128,21 +246,26 @@ a {
   font-family: var(--font-ui);
 }
 
+/* The big hero h1. clamp() scales the size from ~mobile to desktop without
+   media queries. Tight letter-spacing + sub-1 line-height = display-typography feel. */
 .hero-block h1 {
   margin: 0.8rem 0 0;
   font-size: clamp(2rem, 5.6vw, 4.35rem);
   line-height: 0.96;
   letter-spacing: -0.03em;
-  font-weight: 530;
+  font-weight: 530;            /* between regular (400) and medium (500) — Manrope-specific. */
   max-width: 16ch;
   font-family: var(--font-ui);
 }
 
+/* The "building @ cal poly slo" sub-line is a <span> inside the h1, in a
+   muted color to create hierarchy within a single heading. */
 .hero-block h1 span {
   display: inline-block;
   color: var(--text-secondary);
 }
 
+/* Pitch paragraph below the title row. Capped at 58ch for readability. */
 .hero-copy {
   margin: clamp(1.25rem, 2.5vw, 1.8rem) 0 0;
   font-size: clamp(1rem, 1.2vw, 1.08rem);
@@ -151,6 +274,7 @@ a {
   color: var(--text-secondary);
 }
 
+/* CTA row at the bottom of the hero. flex-wrap so things stack on narrow screens. */
 .hero-actions {
   margin-top: clamp(1.6rem, 3vw, 2.4rem);
   display: flex;
@@ -159,25 +283,37 @@ a {
   align-items: flex-start;
 }
 
+/* -----------------------------------------------------------------------------
+   CTA buttons — pill-shaped action buttons used across the site.
+----------------------------------------------------------------------------- */
+
+/* Shared transition setup for both primary and secondary variants. */
 .cta-primary,
 .cta-secondary {
-  border-radius: 999px;
+  border-radius: 999px;        /* pill shape. */
   transition-property: transform, background-color, border-color, color, box-shadow;
   transition-duration: var(--micro);
   transition-timing-function: var(--ease-smooth);
 }
 
+/* Primary CTA — bordered, opaque-ish surface. */
 .cta-primary {
   padding: 0.74rem 1.06rem;
   border: 1px solid var(--border);
   background: color-mix(in srgb, var(--surface) 90%, transparent);
+  /* Inset shadow used as a transparent placeholder so the hover transition
+     into a glowing outer shadow doesn't cause a layout shift. */
   box-shadow: inset 0 0 0 1px transparent;
 }
 
+/* Force monospace text inside the primary CTA (e.g. "<view-work />") to use
+   the high-contrast text color regardless of parent context. */
 .cta-primary .mono {
   color: var(--text-primary);
 }
 
+/* Hover/focus state — accent glow halo + 1px lift. focus-visible (not :focus)
+   so keyboard users get the indicator but mouse clicks don't trigger it. */
 .cta-primary:hover,
 .cta-primary:focus-visible {
   border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
@@ -185,6 +321,8 @@ a {
   transform: translateY(-1px);
 }
 
+/* Secondary CTA — borderless until hover. Used where we want a subtler
+   action than the primary. */
 .cta-secondary {
   padding: 0.74rem 1.16rem;
   border: 1px solid transparent;
@@ -198,22 +336,34 @@ a {
   border-color: var(--border);
 }
 
+/* =============================================================================
+   "START A PROJECT" REVEAL CHIP
+   Trigger button that expands an email chip below it. The animation is
+   driven by a grid-template-rows trick: 0fr → 1fr animates height without
+   needing a fixed pixel value. See components/start-project-contact.tsx.
+============================================================================= */
+
 .start-project-wrap {
   display: grid;
   align-content: start;
   gap: 0.5rem;
 }
 
+/* The trigger button inherits .cta-primary styling — this rule just adjusts
+   the font and pointer behavior on top. */
 .start-project-trigger {
   font-family: var(--font-ui);
   color: var(--text-primary);
   cursor: pointer;
 }
 
+/* Collapsed state of the reveal panel.
+   Trick: a grid with a single row at 0fr "collapses" the row to zero height,
+   and 1fr expands it to its natural content height. Animatable in modern browsers. */
 .start-project-reveal {
   width: min(100%, 43rem);
   display: grid;
-  grid-template-rows: 0fr;
+  grid-template-rows: 0fr;     /* collapsed. */
   opacity: 0;
   transform: translateY(-8px);
   transition-property: grid-template-rows, opacity, transform;
@@ -221,12 +371,15 @@ a {
   transition-timing-function: var(--ease-smooth);
 }
 
+/* Expanded state — toggled via the .is-open class added by the React component. */
 .start-project-reveal.is-open {
-  grid-template-rows: 1fr;
+  grid-template-rows: 1fr;     /* expanded to content height. */
   opacity: 1;
   transform: translateY(0);
 }
 
+/* The actual chip inside the reveal — pill with three columns:
+   icon · email · copy button. */
 .start-project-chip {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
@@ -238,6 +391,8 @@ a {
   background: color-mix(in srgb, var(--surface) 90%, transparent);
   padding: 0.42rem 0.5rem 0.42rem 0.72rem;
   overflow: hidden;
+  /* The chip animates separately from its parent reveal — slightly different
+     duration creates a nicer staggered feel. */
   opacity: 0;
   transform: translateY(-8px);
   transition-property: opacity, transform;
@@ -245,11 +400,13 @@ a {
   transition-timing-function: var(--ease-smooth);
 }
 
+/* When the reveal is open, the inner chip animates in too. */
 .start-project-reveal.is-open .start-project-chip {
   opacity: 1;
   transform: translateY(0);
 }
 
+/* Envelope icon container — fixed-size grid cell that centers the SVG inside it. */
 .start-project-icon {
   width: 1.6rem;
   height: 1.6rem;
@@ -263,9 +420,10 @@ a {
   height: 1.2rem;
 }
 
+/* The email text — single-line ellipsis if it overflows the middle column. */
 .start-project-email {
   margin: 0;
-  min-width: 0;
+  min-width: 0;                /* allow flex/grid item to shrink past content. */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -274,6 +432,7 @@ a {
   letter-spacing: 0.01em;
 }
 
+/* The round copy button on the right of the chip. */
 .start-project-copy {
   border: 1px solid var(--border);
   border-radius: 999px;
@@ -281,7 +440,7 @@ a {
   height: 2rem;
   display: inline-grid;
   place-items: center;
-  flex: 0 0 auto;
+  flex: 0 0 auto;              /* never shrink. */
   padding: 0;
   background: color-mix(in srgb, var(--surface) 76%, transparent);
   color: var(--text-secondary);
@@ -296,6 +455,7 @@ a {
   height: 1.02rem;
 }
 
+/* Hover/focus — slight lift + accent border. */
 .start-project-copy:hover,
 .start-project-copy:focus-visible {
   border-color: color-mix(in srgb, var(--accent) 34%, var(--border));
@@ -303,10 +463,18 @@ a {
   transform: translateY(-1px);
 }
 
+/* "Just copied" state — toggled by the React component for ~1.4s after a
+   successful clipboard write. Stronger accent border to reinforce the change. */
 .start-project-copy.is-copied {
   color: var(--text-primary);
   border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
 }
+
+/* =============================================================================
+   SELECTED WORK LIST (home page)
+   Despite the .footer-grid class name (historical), this is the project list
+   block, NOT the footer. Each row is a WorkProjectLink that navigates to /work.
+============================================================================= */
 
 .footer-grid {
   width: min(100%, 76rem);
@@ -317,6 +485,7 @@ a {
   gap: 1.5rem;
 }
 
+/* Small "Selected Work" eyebrow label above the list. */
 .work-label {
   margin: 0 0 0.65rem;
   color: var(--text-muted);
@@ -326,6 +495,7 @@ a {
   font-family: var(--font-code);
 }
 
+/* Reset <ol> defaults; we drive layout entirely with grid. */
 .work-list {
   list-style: none;
   margin: 0;
@@ -334,6 +504,9 @@ a {
   gap: 0.42rem;
 }
 
+/* Each project row: index (left) · content (center) · year (right).
+   Border defaults to transparent so the hover state can transition INTO a
+   visible border without a layout shift. */
 .work-row {
   display: grid;
   grid-template-columns: 3rem minmax(0, 1fr) auto;
@@ -347,6 +520,9 @@ a {
   transition-timing-function: var(--ease-standard);
 }
 
+/* Hover/focus: visible border + subtle bg + 4px translate-right + soft glow.
+   The translate-right gesture is a recurring pattern (also on /work cards) —
+   suggests "this row will lead you somewhere". */
 .work-row:hover,
 .work-row:focus-visible {
   border-color: color-mix(in srgb, var(--accent) 24%, var(--border));
@@ -355,11 +531,13 @@ a {
   box-shadow: 0 12px 28px -18px var(--accent-glow);
 }
 
+/* Index numeral (01, 02, ...) — muted by default. */
 .work-index {
   color: var(--text-muted);
   font-size: 0.87rem;
 }
 
+/* Middle column: title + tag chip list. flex-wrap allows tags to wrap if many. */
 .work-content {
   min-width: 0;
   display: flex;
@@ -368,6 +546,7 @@ a {
   gap: 0.58rem 0.75rem;
 }
 
+/* Project title — secondary color by default, brightens on row hover. */
 .work-title {
   font-size: clamp(0.96rem, 1.35vw, 1.08rem);
   color: var(--text-secondary);
@@ -379,6 +558,7 @@ a {
   color: var(--text-primary);
 }
 
+/* Tag chip list inside .work-content. */
 .work-tags {
   list-style: none;
   margin: 0;
@@ -388,6 +568,7 @@ a {
   gap: 0.35rem;
 }
 
+/* Individual tag chip. Pill shape, hairline border, monospace text. */
 .work-tag {
   border: 1px solid var(--border);
   background: color-mix(in srgb, var(--surface) 84%, transparent);
@@ -398,10 +579,16 @@ a {
   letter-spacing: 0.04em;
 }
 
+/* Year column on the right — muted, monospace (inherited via .mono in JSX). */
 .work-year {
   color: var(--text-muted);
   font-size: 0.88rem;
 }
+
+/* =============================================================================
+   SOCIAL LINKS (currently unused in JSX but kept for reuse)
+   Underline-on-hover effect via a transformed pseudo-element.
+============================================================================= */
 
 .social-links {
   display: flex;
@@ -417,6 +604,8 @@ a {
   transition: color var(--micro) var(--ease-smooth);
 }
 
+/* Pseudo-element underline. scaleX(0) hides it, scaleX(1) on hover reveals it.
+   transform-origin: left makes it expand left-to-right (not from the center). */
 .social-links a::after {
   content: "";
   position: absolute;
@@ -440,9 +629,20 @@ a {
   transform: scaleX(1);
 }
 
+/* =============================================================================
+   Utility classes.
+============================================================================= */
+
+/* Apply the monospace stack. Used liberally on terminal-themed text. */
 .mono {
   font-family: var(--font-code);
 }
+
+/* =============================================================================
+   /work PAGE SHELL
+   Equivalent of .portfolio-shell but for the /work route. Doesn't use
+   space-between because /work has natural top-to-bottom flow.
+============================================================================= */
 
 .work-page-shell {
   position: relative;
@@ -454,11 +654,13 @@ a {
   animation: page-enter var(--page) var(--ease-smooth) both;
 }
 
+/* Page header (title + intro copy + nav row). 76rem matches the panels below. */
 .work-page-header {
   width: min(100%, 76rem);
   margin: 0 auto clamp(1.2rem, 3vw, 2rem);
 }
 
+/* Eyebrow above the page title. */
 .work-page-kicker {
   margin: 0;
   color: var(--text-muted);
@@ -468,6 +670,7 @@ a {
   font-family: var(--font-ui);
 }
 
+/* /work h1 ("View Work"). Slightly smaller than the home hero h1. */
 .work-page-header h1 {
   margin: 0.65rem 0 0;
   font-size: clamp(2rem, 4.8vw, 3.35rem);
@@ -477,6 +680,7 @@ a {
   font-weight: 530;
 }
 
+/* The intro paragraph under the h1. */
 .work-page-copy {
   margin: 1rem 0 0;
   max-width: 58ch;
@@ -484,6 +688,7 @@ a {
   line-height: 1.65;
 }
 
+/* Quick-jump nav row (cd ../home, ./passion, ./work, ./school). */
 .work-nav-row {
   display: flex;
   flex-wrap: wrap;
@@ -492,6 +697,7 @@ a {
   margin-top: 1.1rem;
 }
 
+/* Pill-shaped nav buttons. Same lift+glow hover as primary CTAs. */
 .work-back-link {
   display: inline-flex;
   border: 1px solid var(--border);
@@ -513,6 +719,7 @@ a {
   transform: translateY(-1px);
 }
 
+/* Tighter nav-cmd variant (currently unused in JSX but kept for variant flexibility). */
 .work-nav-cmd {
   font-size: 0.8rem;
   color: var(--text-muted);
@@ -527,20 +734,33 @@ a {
   color: var(--text-primary);
 }
 
+/* =============================================================================
+   TERMINAL PANELS
+   The macOS-terminal-window styled containers used for /work project sections,
+   the /404 page, and the GitHub panel on home. Shared chrome:
+     .terminal-panel     = the outer rounded card.
+     .terminal-topbar    = the top bar with traffic-light dots + path label.
+     .terminal-dots      = the three colored circles.
+     .terminal-path      = the "user@host:~/dir" label.
+     .terminal-command   = the "$ ls -la" faux-prompt line below the topbar.
+============================================================================= */
+
 .terminal-panel {
   width: min(100%, 76rem);
   margin: 0 auto;
   border: 1px solid var(--border);
   border-radius: 1rem;
   background: var(--terminal-frame);
-  overflow: hidden;
-  backdrop-filter: blur(8px);
+  overflow: hidden;            /* keeps backdrop-filter blur clean at corners. */
+  backdrop-filter: blur(8px);  /* frosted-glass effect over the ambient layer. */
 }
 
+/* Vertical spacing between consecutive panels (no top margin on first). */
 .terminal-panel + .terminal-panel {
   margin-top: clamp(1.5rem, 3vw, 2.25rem);
 }
 
+/* Topbar: dots on the left, path on the right. */
 .terminal-topbar {
   display: flex;
   align-items: center;
@@ -550,6 +770,8 @@ a {
   padding: 0.7rem 0.9rem;
 }
 
+/* The three "traffic light" dots. We don't use the real macOS red/yellow/green —
+   instead, three opacity steps keep the palette monochromatic. */
 .terminal-dots {
   display: inline-flex;
   gap: 0.35rem;
@@ -560,23 +782,26 @@ a {
   height: 0.58rem;
   border-radius: 999px;
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.32);  /* 1st dot — brightest. */
 }
 
 .terminal-dots span:nth-child(2) {
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.22);  /* 2nd dot — middle. */
 }
 
 .terminal-dots span:nth-child(3) {
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.14);  /* 3rd dot — dimmest. */
 }
 
+/* The path label ("emilio@portfolio:~/passion") — small, muted. */
 .terminal-path {
   margin: 0;
   color: var(--text-muted);
   font-size: 0.76rem;
 }
 
+/* The faux shell command line ("$ ls -la ./passion"). Sits below the topbar
+   with its own bottom border to separate it from the panel body. */
 .terminal-command {
   margin: 0;
   padding: 0.72rem 0.9rem;
@@ -585,6 +810,7 @@ a {
   border-bottom: 1px solid var(--border);
 }
 
+/* The list of project cards inside a panel. Reset list defaults; use grid for spacing. */
 .terminal-projects {
   list-style: none;
   margin: 0;
@@ -592,6 +818,10 @@ a {
   display: grid;
   gap: 0.78rem;
 }
+
+/* =============================================================================
+   PROJECT CARDS (inside terminal panels)
+============================================================================= */
 
 .terminal-project-card {
   border: 1px solid var(--border);
@@ -603,6 +833,8 @@ a {
   transition-timing-function: var(--ease-standard);
 }
 
+/* Hover/focus-within (focus-within so keyboard focus on inner links also lights
+   up the card). Same translate-right gesture as .work-row on home. */
 .terminal-project-card:hover,
 .terminal-project-card:focus-within {
   border-color: color-mix(in srgb, var(--accent) 32%, var(--border));
@@ -610,6 +842,7 @@ a {
   box-shadow: 0 12px 28px -18px var(--accent-glow);
 }
 
+/* Card header row: index · title · status pill. */
 .terminal-project-head {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
@@ -617,11 +850,13 @@ a {
   column-gap: 0.72rem;
 }
 
+/* Card index ("01", "02"...). */
 .terminal-project-index {
   color: var(--text-muted);
   font-size: 0.8rem;
 }
 
+/* Card title <h2>. */
 .terminal-project-head h2 {
   margin: 0;
   font-size: clamp(1rem, 2vw, 1.17rem);
@@ -630,6 +865,10 @@ a {
   font-family: var(--font-ui);
 }
 
+/* -----------------------------------------------------------------------------
+   Status pill — base style, plus three variants by JS class.
+   The variant name in JSX MUST match: terminal-status-{active|shipping|archived}.
+----------------------------------------------------------------------------- */
 .terminal-status {
   border-radius: 999px;
   border: 1px solid var(--border);
@@ -637,34 +876,40 @@ a {
   font-size: 0.66rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-muted);    /* fallback if no variant class is present. */
 }
 
+/* "active" = currently being worked on. Brightest text. */
 .terminal-status-active {
   color: var(--text-primary);
 }
 
+/* "shipping" = released, low-touch maintenance. Mid brightness. */
 .terminal-status-shipping {
   color: var(--text-secondary);
 }
 
+/* "archived" = done. Dimmest, slightly transparent for a "faded" look. */
 .terminal-status-archived {
   color: var(--text-muted);
   opacity: 0.85;
 }
 
+/* Card summary paragraph (the one-liner under the header). */
 .terminal-summary {
   margin: 0.72rem 0 0;
   color: var(--text-secondary);
   line-height: 1.6;
 }
 
+/* Meta row: "year:" + "stack:" labels + the chip list. flex-wrap so chips
+   flow to a second line if needed. */
 .terminal-meta-row {
   margin-top: 0.72rem;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.42rem 0.65rem;
+  gap: 0.42rem 0.65rem;        /* row-gap column-gap. */
 }
 
 .terminal-meta-row p {
@@ -673,6 +918,7 @@ a {
   color: var(--text-muted);
 }
 
+/* Stack chip list (technologies). Same chip pattern as .work-tags. */
 .terminal-stack {
   list-style: none;
   margin: 0;
@@ -690,6 +936,7 @@ a {
   color: var(--text-muted);
 }
 
+/* Actions row at the bottom of a card (open_repo / open_live links). */
 .terminal-actions {
   margin-top: 0.82rem;
   display: flex;
@@ -697,6 +944,7 @@ a {
   gap: 0.5rem;
 }
 
+/* The pill-shaped link buttons inside .terminal-actions. */
 .terminal-link {
   border: 1px solid var(--border);
   border-radius: 999px;
@@ -716,6 +964,14 @@ a {
   transform: translateY(-1px);
 }
 
+/* =============================================================================
+   CONTACT FOOTER (.contact-footer)
+   Two layout variants share this base style:
+     - default: a full-width row at the bottom of /work.
+     - corner:  a small absolute-positioned block in the home hero title row
+                (toggled with .contact-footer-corner).
+============================================================================= */
+
 .contact-footer {
   width: min(100%, 76rem);
   margin: clamp(1.6rem, 2.8vw, 2.4rem) auto 0;
@@ -727,6 +983,9 @@ a {
   padding: 0.72rem 0.9rem;
 }
 
+/* "corner" variant — absolutely positioned in the top-right of .portfolio-shell.
+   The shell has position: relative + isolation: isolate so this anchors correctly.
+   The mobile breakpoint (below) flips this back to position: static. */
 .contact-footer-corner {
   position: absolute;
   top: clamp(1.25rem, 2vw, 2rem);
@@ -736,6 +995,7 @@ a {
   z-index: 3;
 }
 
+/* Inside the corner variant: shift the children to push label left and links right. */
 .contact-footer-corner .contact-footer-main {
   justify-content: space-between;
 }
@@ -750,6 +1010,7 @@ a {
   justify-content: flex-end;
 }
 
+/* Inner row: the "$ ./contact --links" label + the link list. */
 .contact-footer-main {
   display: flex;
   align-items: center;
@@ -757,12 +1018,14 @@ a {
   gap: 0.75rem;
 }
 
+/* The faux-shell label ("$ ./contact --links" or copyright signature). */
 .contact-footer-label {
   margin: 0;
   color: var(--text-muted);
   font-size: 0.76rem;
 }
 
+/* Links list — flex-wrap so links flow to a new line on narrow screens. */
 .contact-footer-links {
   display: flex;
   flex-wrap: wrap;
@@ -770,34 +1033,48 @@ a {
   gap: 0.5rem;
 }
 
+/* The signature line (© Emilio Ledesma 2026). Inherits .contact-footer-label
+   styling; this rule just zeros the margin. */
 .contact-footer-signature {
   margin: 0;
 }
 
+/* Corner-variant signature alignment override. */
 .contact-footer-signature-corner {
   text-align: left;
 }
 
+/* =============================================================================
+   /404 PAGE
+============================================================================= */
+
+/* Centers the 404 panel both horizontally and vertically inside .work-page-shell. */
 .not-found-shell {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+/* Compact panel variant — narrower max width than the 76rem default, for the
+   small 404 message. */
 .terminal-panel-compact {
   width: min(100%, 44rem);
 }
 
+/* Body of the 404 panel (under the topbar). */
 .terminal-not-found-body {
   padding: 1rem 0.9rem 1.1rem;
 }
 
+/* The "404: page_not_found" line — small, muted, monospace via .mono. */
 .terminal-not-found-code {
   margin: 0;
   color: var(--text-muted);
   font-size: 0.78rem;
 }
 
+/* Headline inside the 404 body (currently not used in JSX — JSX uses the
+   code paragraph instead — kept for shape parity if the design changes). */
 .terminal-not-found-body h1 {
   margin: 0.62rem 0 0;
   font-family: var(--font-ui);
@@ -807,6 +1084,7 @@ a {
   font-size: clamp(1.5rem, 4vw, 2.45rem);
 }
 
+/* The recovery copy ("The page you requested..."). */
 .terminal-not-found-copy {
   margin: 0.9rem 0 0;
   color: var(--text-secondary);
@@ -814,28 +1092,43 @@ a {
   line-height: 1.62;
 }
 
+/* =============================================================================
+   FOCUS RING (keyboard-only)
+   Applied to ANY element when focused via keyboard (not mouse). Uses
+   color-mix for a slightly off-accent ring so it reads against any surface.
+============================================================================= */
 :focus-visible {
   outline: 2px solid color-mix(in srgb, var(--accent) 84%, white 10%);
   outline-offset: 2px;
 }
 
+/* =============================================================================
+   MOBILE BREAKPOINT (≤ 860px)
+   The single responsive cutover for narrow screens. Fold multi-column layouts
+   into single columns, move the corner footer back inline, etc.
+============================================================================= */
 @media (max-width: 860px) {
+  /* Tighter vertical rhythm on small screens. */
   .portfolio-shell {
     gap: 2.5rem;
   }
 
+  /* Allow the hero h1 to use its full container width (no 16ch cap). */
   .hero-block h1 {
     max-width: 100%;
   }
 
+  /* Stack hero copy + corner Footer vertically instead of side-by-side. */
   .hero-title-row {
     flex-direction: column;
   }
 
+  /* Widen the corner footer to full content width when stacked. */
   .contact-footer-corner {
     width: min(100%, 76rem);
   }
 
+  /* Selected Work list: collapse to a single column. */
   .footer-grid {
     grid-template-columns: 1fr;
     gap: 1.2rem;
@@ -845,20 +1138,23 @@ a {
     justify-content: flex-start;
   }
 
+  /* /work rows: tighten the index column, drop the year column to its own row. */
   .work-row {
     grid-template-columns: 2.4rem minmax(0, 1fr);
     row-gap: 0.45rem;
   }
 
   .work-year {
-    grid-column: 2;
+    grid-column: 2;            /* land in the content column, below the title. */
     font-size: 0.8rem;
   }
 
+  /* Reveal panel: narrower max width on small screens. */
   .start-project-reveal {
     width: min(100%, 32rem);
   }
 
+  /* Chip: drop to two columns (icon + email) and let the copy button wrap below. */
   .start-project-chip {
     grid-template-columns: auto minmax(0, 1fr);
     border-radius: 1rem;
@@ -867,19 +1163,22 @@ a {
   }
 
   .start-project-copy {
-    grid-column: 1 / -1;
+    grid-column: 1 / -1;       /* span both columns. */
     justify-self: start;
   }
 
+  /* Tighter page padding on /work. */
   .work-page-shell {
     padding: 1rem 0.8rem 1.3rem;
   }
 
+  /* Stack terminal-topbar children vertically (dots above path). */
   .terminal-topbar {
     align-items: flex-start;
     flex-direction: column;
   }
 
+  /* Project card head: drop to two columns, let the status pill wrap below. */
   .terminal-project-head {
     grid-template-columns: 2.2rem minmax(0, 1fr);
     row-gap: 0.4rem;
@@ -890,6 +1189,7 @@ a {
     justify-self: start;
   }
 
+  /* Contact footer: stack label above links. */
   .contact-footer-main {
     align-items: flex-start;
     flex-direction: column;
@@ -899,6 +1199,7 @@ a {
     justify-content: flex-start;
   }
 
+  /* Corner footer: switch to in-flow positioning instead of absolute. */
   .contact-footer-corner {
     position: static;
     width: min(100%, 76rem);
@@ -914,11 +1215,18 @@ a {
   }
 }
 
+/* =============================================================================
+   PAGE ENTRANCE ANIMATION
+   Used by both .portfolio-shell and .work-page-shell on mount via the
+   `animation: page-enter ...` shorthand.
+   NOTE: there's no explicit prefers-reduced-motion override here — if you want
+   to fully disable, add a @media (prefers-reduced-motion: reduce) rule.
+============================================================================= */
 @keyframes page-enter {
   from {
     opacity: 0;
     transform: translateY(10px);
-    filter: blur(8px);
+    filter: blur(8px);         /* frosted "lift in" effect. */
   }
   to {
     opacity: 1;
@@ -928,21 +1236,34 @@ a {
 }
 
 /* ── project modal ─────────────────────────────────── */
+/* =============================================================================
+   PROJECT MODAL (.pm-*)
+   The full-screen overlay opened from clicking a /work card.
+   See components/project-modal.tsx for the JSX structure.
+============================================================================= */
 
+/* Cursor hint — applied to <li>s on /work that act as modal triggers. */
 .pm-trigger {
   cursor: pointer;
 }
 
+/* Overlay fades in. */
 @keyframes pm-overlay-in {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
+/* Window animates in with a slight rise + scale + de-blur — feels lift-in. */
 @keyframes pm-window-in {
   from { opacity: 0; transform: translateY(16px) scale(0.97); filter: blur(6px); }
   to   { opacity: 1; transform: translateY(0)    scale(1);    filter: blur(0); }
 }
 
+/* The dimmed full-screen layer behind the modal window.
+   - position: fixed + inset: 0 covers the whole viewport.
+   - z-index: 100 to sit above all page content.
+   - overflow-y: auto so the modal can be scrolled if it overflows.
+   - backdrop-filter blurs whatever's behind it for visual depth. */
 .pm-overlay {
   position: fixed;
   inset: 0;
@@ -958,18 +1279,23 @@ a {
   animation: pm-overlay-in 200ms var(--ease-smooth) both;
 }
 
+/* The actual content card. flex-shrink: 0 so it doesn't squish in the flex
+   parent when its content is taller than the viewport. */
 .pm-window {
   width: min(100%, 64rem);
   flex-shrink: 0;
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 1.1rem;
   background: var(--surface);
+  /* Two-stack shadow: inner highlight + outer dropshadow. */
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.04) inset,
     0 32px 64px -24px rgba(0, 0, 0, 0.3);
   animation: pm-window-in 300ms var(--ease-smooth) both;
 }
 
+/* Modal topbar — same dot-pattern + path as the panel topbars elsewhere,
+   with an "esc" close button on the right. */
 .pm-topbar {
   display: flex;
   align-items: center;
@@ -978,6 +1304,8 @@ a {
   padding: 0.7rem 0.9rem;
 }
 
+/* Modal path label — flex: 1 lets it absorb leftover space, pushing the
+   close button to the far right. */
 .pm-path {
   margin: 0;
   flex: 1;
@@ -985,6 +1313,8 @@ a {
   font-size: 0.76rem;
 }
 
+/* The "esc" button. Custom styled (not .terminal-link) because it's a <button>
+   not an <a>, and needs reset background:transparent. */
 .pm-close {
   font-size: 0.68rem;
   letter-spacing: 0.1em;
@@ -1005,6 +1335,7 @@ a {
   border-color: color-mix(in srgb, var(--accent) 32%, var(--border));
 }
 
+/* Modal command line ("$ cat README.md") — styled identically to .terminal-command. */
 .pm-command {
   margin: 0;
   padding: 0.72rem 0.9rem;
@@ -1013,11 +1344,13 @@ a {
   border-bottom: 1px solid var(--border);
 }
 
+/* Modal body container. Currently just a flex column for future expansion. */
 .pm-body {
   display: flex;
   flex-direction: column;
 }
 
+/* The actual content block (title, description, stack, actions). */
 .pm-content {
   padding: 1.8rem 1.4rem 2rem;
   display: flex;
@@ -1025,6 +1358,7 @@ a {
   gap: 1.1rem;
 }
 
+/* Title row: project title + status pill side-by-side, wraps on narrow widths. */
 .pm-title-row {
   display: flex;
   align-items: center;
@@ -1032,6 +1366,7 @@ a {
   flex-wrap: wrap;
 }
 
+/* Modal h2 — bigger than .terminal-project-head h2 since the modal is more focused. */
 .pm-title {
   margin: 0;
   font-size: clamp(1.3rem, 3vw, 1.9rem);
@@ -1041,12 +1376,14 @@ a {
   color: var(--text-primary);
 }
 
+/* Year label inside the modal. */
 .pm-year {
   margin: 0;
   font-size: 0.78rem;
   color: var(--text-muted);
 }
 
+/* Description — capped at 60ch for readability. */
 .pm-description {
   margin: 0;
   color: var(--text-secondary);
@@ -1054,6 +1391,8 @@ a {
   max-width: 60ch;
 }
 
+/* Stack row: "stack:" label + the chip list. baseline alignment so the label
+   sits nicely with the first chip's text. */
 .pm-stack-row {
   display: flex;
   align-items: baseline;
@@ -1064,7 +1403,7 @@ a {
 .pm-stack-label {
   font-size: 0.78rem;
   color: var(--text-muted);
-  flex: 0 0 auto;
+  flex: 0 0 auto;              /* never shrink. */
 }
 
 .pm-stack {
@@ -1076,6 +1415,8 @@ a {
   gap: 0.4rem;
 }
 
+/* Stack chip in the modal. Slightly more contrast than the card-version chips
+   since the modal background is opaque. */
 .pm-stack-chip {
   font-size: 0.72rem;
   color: var(--text-secondary);
@@ -1085,6 +1426,7 @@ a {
   background: color-mix(in srgb, var(--surface) 70%, transparent);
 }
 
+/* Modal action row — same flex-wrap pattern as the card version. */
 .pm-actions {
   display: flex;
   flex-wrap: wrap;
@@ -1092,12 +1434,19 @@ a {
   margin-top: 0.3rem;
 }
 
+/* Action CTA inside the modal. Slightly larger than .terminal-link since the
+   modal context allows for more visual weight. */
 .pm-cta {
   font-size: 0.82rem;
   padding: 0.6rem 1rem;
 }
 
-/* Hero side-by-side row: description + GitHub panel */
+/* =============================================================================
+   HOME HERO ROW — secondary row below the title.
+   Layout: [hero copy | github panel] side-by-side at desktop, stacks at mobile.
+   The second column is wider (1.4fr) because the GitHub graph needs more width
+   than the descriptive copy.
+============================================================================= */
 .hero-row {
   margin-top: clamp(1.25rem, 2.5vw, 1.8rem);
   display: grid;
@@ -1106,22 +1455,35 @@ a {
   align-items: start;
 }
 
+/* Strip the .hero-copy default top margin since the parent .hero-row has the
+   margin already (otherwise we'd double-up). */
 .hero-row > .hero-copy {
   margin: 0;
 }
 
+/* Same trick for the GitHub panel — kill its own top margin and ensure it
+   can shrink past content size in a grid cell. */
 .hero-row > .gh-panel {
   margin: 0;
   min-width: 0;
 }
 
+/* Mobile: collapse to a single column. Note: this breakpoint is 900px,
+   slightly different from the global 860px breakpoint above — chosen so the
+   stack happens before the panel becomes uncomfortably narrow. */
 @media (max-width: 900px) {
   .hero-row {
     grid-template-columns: minmax(0, 1fr);
   }
 }
 
-/* GitHub contributions panel (home hero) */
+/* =============================================================================
+   GITHUB CONTRIBUTIONS PANEL (home hero)
+   Wraps the react-github-calendar widget. Shares the terminal-panel chrome
+   (topbar with dots + path) plus a few extras: a username link in the topbar
+   and a blinking cursor at the end of the faux command.
+============================================================================= */
+
 .gh-panel {
   width: 100%;
   margin-top: clamp(1.5rem, 3vw, 2.25rem);
@@ -1130,6 +1492,8 @@ a {
   background: var(--terminal-frame);
   overflow: hidden;
   backdrop-filter: blur(8px);
+  /* Independent entrance animation (separate from page-enter) — staggered
+     entry so the GitHub panel reveals slightly after the rest of the page. */
   animation: gh-panel-in 620ms var(--ease-smooth) both;
 }
 
@@ -1144,6 +1508,8 @@ a {
   }
 }
 
+/* The "@Damilss" link in the topbar. margin-left: auto pushes it to the
+   far right of the topbar's flex row. */
 .gh-username {
   margin-left: auto;
   font-size: 0.76rem;
@@ -1156,6 +1522,8 @@ a {
   color: var(--text-primary);
 }
 
+/* Blinking cursor at the end of the faux git-log command.
+   `steps(2, jump-none)` produces a hard on/off blink (no smooth fade). */
 .gh-cursor {
   display: inline-block;
   width: 0.55ch;
@@ -1165,10 +1533,13 @@ a {
 }
 
 @keyframes gh-blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+  0%, 50% { opacity: 1; }      /* visible for the first half. */
+  51%, 100% { opacity: 0; }    /* hidden for the second half. */
 }
 
+/* The wrapper around the actual contribution graph. overflow-x: auto allows
+   horizontal scroll on narrow screens (the graph has a fixed minimum width).
+   Custom thin scrollbar styling below. */
 .gh-graph-wrap {
   padding: 1.1rem 0.95rem 1.1rem;
   overflow-x: auto;
@@ -1176,6 +1547,8 @@ a {
   justify-content: center;
 }
 
+/* WebKit-only scrollbar styling — kept thin and on-brand. Firefox falls back
+   to its default scrollbar (could be added with `scrollbar-width: thin`). */
 .gh-graph-wrap::-webkit-scrollbar {
   height: 6px;
 }
@@ -1185,13 +1558,18 @@ a {
   border-radius: 999px;
 }
 
-/* Theme overrides for react-github-calendar / react-activity-calendar internals. */
+/* -----------------------------------------------------------------------------
+   Theme overrides for react-github-calendar / react-activity-calendar internals.
+   The library renders its own DOM with these class names; these rules retheme
+   it to match our color tokens (mostly fonts and text colors — the squares
+   themselves are themed via the `theme` prop in the React component).
+----------------------------------------------------------------------------- */
 .gh-graph-wrap .react-activity-calendar {
   font-family: var(--font-code);
 }
 
 .gh-graph-wrap .react-activity-calendar text {
-  fill: var(--text-muted);
+  fill: var(--text-muted);     /* axis labels (months / day initials). */
 }
 
 .gh-graph-wrap .react-activity-calendar__count {
