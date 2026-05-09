@@ -165,6 +165,10 @@ export default function WorkPage() {
           <li
             id="mustang-market"
             className="terminal-project-card pm-trigger"
+            role="button"
+            tabIndex={0}
+            // Enter/Space delegate to click so keyboard users can trigger the modal.
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") e.currentTarget.click(); }}
             onClick={() => setActive({
               id: "mustang-market",
               title: "mustang market",
@@ -221,6 +225,10 @@ export default function WorkPage() {
           <li
             id="devsize-plus"
             className="terminal-project-card pm-trigger"
+            role="button"
+            tabIndex={0}
+            // Enter/Space delegate to click so keyboard users can trigger the modal.
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") e.currentTarget.click(); }}
             onClick={() => setActive({
               id: "devsize-plus",
               title: "devsize-plus",
@@ -261,6 +269,10 @@ export default function WorkPage() {
           <li
             id="swoosh-analytics"
             className="terminal-project-card pm-trigger"
+            role="button"
+            tabIndex={0}
+            // Enter/Space delegate to click so keyboard users can trigger the modal.
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") e.currentTarget.click(); }}
             onClick={() => setActive({
               id: "swoosh-analytics",
               title: "swoosh analytics",
@@ -300,6 +312,10 @@ export default function WorkPage() {
           <li
             id="energy-usage-pattern-exploration"
             className="terminal-project-card pm-trigger"
+            role="button"
+            tabIndex={0}
+            // Enter/Space delegate to click so keyboard users can trigger the modal.
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") e.currentTarget.click(); }}
             onClick={() => setActive({
               id: "energy-usage-pattern-exploration",
               title: "energy usage pattern exploration",
@@ -338,6 +354,10 @@ export default function WorkPage() {
           <li
             id="instagram-follower-analyzer"
             className="terminal-project-card pm-trigger"
+            role="button"
+            tabIndex={0}
+            // Enter/Space delegate to click so keyboard users can trigger the modal.
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") e.currentTarget.click(); }}
             onClick={() => setActive({
               id: "instagram-follower-analyzer",
               title: "instagram follower analyzer",
@@ -401,6 +421,10 @@ export default function WorkPage() {
           <li
             id="lilianal-com"
             className="terminal-project-card pm-trigger"
+            role="button"
+            tabIndex={0}
+            // Enter/Space delegate to click so keyboard users can trigger the modal.
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") e.currentTarget.click(); }}
             onClick={() => setActive({
               id: "lilianal-com",
               title: "lilianal.com",
@@ -442,6 +466,10 @@ export default function WorkPage() {
           <li
             id="westcoastbeautyco"
             className="terminal-project-card pm-trigger"
+            role="button"
+            tabIndex={0}
+            // Enter/Space delegate to click so keyboard users can trigger the modal.
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") e.currentTarget.click(); }}
             onClick={() => setActive({
               id: "westcoastbeautyco",
               title: "westcoastbeautyco",
@@ -499,6 +527,10 @@ export default function WorkPage() {
           <li
             id="calpoly-slo"
             className="terminal-project-card pm-trigger"
+            role="button"
+            tabIndex={0}
+            // Enter/Space delegate to click so keyboard users can trigger the modal.
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") e.currentTarget.click(); }}
             onClick={() => setActive({
               id: "calpoly-slo",
               title: "calpoly slo",
