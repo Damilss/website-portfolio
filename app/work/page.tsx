@@ -10,11 +10,13 @@ export default function WorkPage() {
   const close = useCallback(() => setActive(null), []);
 
   useEffect(() => {
-    // sessionStorage path: set by home page link click (no hash in URL, so Next.js won't override)
+    // sessionStorage path: set by home page link click (no hash in URL, so Next.js won't override).
+    // Note: removeItem must happen INSIDE the timer callback — Strict Mode runs effects twice,
+    // and clearing it eagerly would cause the second run to find nothing.
     const pending = sessionStorage.getItem("pendingScroll");
     if (pending) {
-      sessionStorage.removeItem("pendingScroll");
       const timer = setTimeout(() => {
+        sessionStorage.removeItem("pendingScroll");
         document.getElementById(pending)?.scrollIntoView({ behavior: "smooth", block: "center" });
       }, 80);
       return () => clearTimeout(timer);
