@@ -279,7 +279,7 @@ export default function WorkPage() {
               year: "dec 2025",
               status: "shipping",
               description: "a python-based machine learning project that leverages historical nba game data to engineer performance features and train gradient boosted models for game outcome prediction and edge analysis.",
-              stack: ["Python", "Pandas", "NumPy", "Scikit-learn", "MatPlotLib", "XGBoost", "LightGBM"],
+              stack: ["Python", "Pandas", "NumPy", "Scikit-learn", "Matplotlib", "XGBoost", "LightGBM"],
             })}
           >
             <header className="terminal-project-head">
