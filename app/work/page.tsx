@@ -1,9 +1,27 @@
-// /work — the project index page. Three "terminal panels" (passion / work / school)
-// each hold hand-authored project cards. Each card opens a modal on click and has
-// a stable `id` so the home page can deep-link to it via `/work#<slug>`.
+// =============================================================================
+// /work — the Project Index page.
 //
-// Why "use client": this page owns modal state and runs scroll-into-view on mount,
-// both of which need the browser.
+// Three "terminal panels" (passion / work / school) each hold hand-authored
+// project cards. Each card opens a ProjectModal on click and has a stable
+// `id` so other pages can deep-link to it via `/work#<slug>`.
+//
+// Why "use client":
+//   - this page owns modal state (useState),
+//   - it runs scroll-into-view effects on mount (needs `window` / `sessionStorage` /
+//     `document`), both of which require the browser.
+//
+// Why hand-authored cards (not a .map()):
+//   See CLAUDE.md and docs/landing-rework.md. Each card is intentionally explicit
+//   so it can diverge from its siblings (different actions row, different copy
+//   shape, etc.) without growing data-driven branching. Three similar JSX blocks
+//   beat one parameterized component here.
+//
+// Cross-file invariants this page participates in:
+//   - Each <li id="..."> here must match a `projects[].slug` on the home page so
+//     `/work#<slug>` deep links resolve.
+//   - The home page sets `sessionStorage["pendingScroll"]` on click — the effect
+//     below is what actually performs the scroll.
+// =============================================================================
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
@@ -12,23 +30,36 @@ import Footer from "@/components/footer";
 import ProjectModal, { type ProjectData } from "@/components/project-modal";
 
 export default function WorkPage() {
-  // Which project (if any) is currently open in the modal. Null = closed.
-  // We store the whole ProjectData rather than just an id so the modal doesn't
-  // have to look anything up — the card's click handler hands it the data directly.
+  // -- Modal state ------------------------------------------------------------
+  // `active` holds the *whole* ProjectData for the currently open card, or null
+  // when the modal is closed. We store the data itself (not just an id) so the
+  // modal doesn't need to look anything up — the click handler hands it the
+  // object directly.
   const [active, setActive] = useState<ProjectData | null>(null);
+
+  // useCallback so the close handler has a stable identity across renders
+  // (ProjectModal can rely on it for memoization / effect deps).
   const close = useCallback(() => setActive(null), []);
 
-  // Scroll-on-mount. Two ways the user can arrive here wanting to land on a card:
-  //   1. They clicked a link on the home page, which set sessionStorage["pendingScroll"]
-  //      to the card's slug *without* putting a hash in the URL (so Next's router
-  //      doesn't fight our smooth-scroll).
-  //   2. They typed/refreshed a URL like /work#mustang-market — fallback below.
+  // -- Scroll-on-mount --------------------------------------------------------
+  // Two ways the user can arrive here wanting to land on a specific card:
+  //
+  //   1. They clicked a link on the home page, which sets
+  //      sessionStorage["pendingScroll"] to the card slug *without* putting a
+  //      hash in the URL. We deliberately avoid the hash so Next's router and
+  //      the browser's native anchor-jump don't fight our smooth scroll.
+  //
+  //   2. They typed or refreshed a URL like `/work#mustang-market`. That's the
+  //      fallback path, lower in the effect.
   useEffect(() => {
     const pending = sessionStorage.getItem("pendingScroll");
     if (pending) {
-      // Short delay (80ms) — just enough for the cards to mount and lay out.
-      // We clear sessionStorage *inside* the timeout: React Strict Mode runs effects
-      // twice in dev, and clearing eagerly would make the second run find nothing.
+      // Short delay (80ms) — just enough for the cards to mount and lay out
+      // before we measure their position. Anything longer feels laggy.
+      //
+      // We `removeItem` *inside* the timeout callback, NOT before scheduling it.
+      // React Strict Mode runs effects twice in dev: if we cleared eagerly, the
+      // second run would find an empty key and silently do nothing.
       const timer = setTimeout(() => {
         sessionStorage.removeItem("pendingScroll");
         document.getElementById(pending)?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -36,10 +67,14 @@ export default function WorkPage() {
       return () => clearTimeout(timer);
     }
 
-    // Fallback: read the URL hash. Longer delay (400ms) so the browser's own
-    // jump-to-anchor settles first; otherwise it fights our smooth scroll.
+    // Fallback: read the URL hash directly. `slice(1)` drops the leading `#`.
     const hash = window.location.hash.slice(1);
     if (!hash) return;
+
+    // Longer delay (400ms) here than for the sessionStorage path: when the URL
+    // contains a hash, the browser performs its own instant jump-to-anchor on
+    // load. Waiting lets that settle so our smooth scroll lands cleanly instead
+    // of fighting the native jump.
     const timer = setTimeout(() => {
       document.getElementById(hash)?.scrollIntoView({ behavior: "smooth", block: "center" });
     }, 400);
@@ -47,24 +82,35 @@ export default function WorkPage() {
   }, []);
 
   return (
+    // `work-page-shell` is the page-level wrapper styled in globals.css —
+    // sets up the dark background, max-width, vertical rhythm, etc.
     <main className="work-page-shell">
-      {/* Decorative background layers (gradient glow + film grain). aria-hidden so
-          screen readers skip them — they carry no information. Styled in globals.css. */}
+      {/* Decorative background layers, both styled in globals.css:
+          - ambient-layer:  soft radial gradient glow.
+          - noise-layer:    subtle film-grain texture.
+          aria-hidden because they carry no information for screen readers. */}
       <div className="ambient-layer" aria-hidden="true" />
       <div className="noise-layer" aria-hidden="true" />
 
-      {/* Modal lives at the top of the tree so it can portal/overlay above all panels.
-          When `active` is null the modal renders nothing. */}
+      {/* Modal sits at the top of the tree so it can portal/overlay above all
+          panels regardless of which card opened it. When `active` is null,
+          ProjectModal renders nothing. */}
       <ProjectModal project={active} onClose={close} />
 
+      {/* Page header: kicker label + h1 + intro copy + quick-jump nav. */}
       <header className="work-page-header">
         <p className="work-page-kicker">Project Index / Terminal View</p>
         <h1>View Work</h1>
         <p className="work-page-copy">
           A focused archive of projects I have shipped or am actively building — split across passion, work, and school.
         </p>
-        {/* Quick-jump nav. Each button scrolls to the first card in that section.
-            The slugs here must stay in sync with the corresponding <li id="..."> below. */}
+
+        {/* Quick-jump nav row.
+            - First item is a real <Link> back to /home (uses Next's client routing).
+            - The other three are <button>s that scroll to the FIRST card in each
+              panel. The slugs hard-coded here ("mustang-market", "lilianal-com",
+              "calpoly-slo") MUST stay in sync with the corresponding <li id="...">
+              below — if you reorder cards, update this nav too. */}
         <div className="work-nav-row">
           <Link className="work-back-link mono" href="/">
             cd .. /home
@@ -75,40 +121,47 @@ export default function WorkPage() {
         </div>
       </header>
 
-      {/* === PASSION PANEL ===
-          Each <li> is a hand-authored card (intentionally not a .map() — see CLAUDE.md
-          and docs/landing-rework.md: cards need to be able to diverge independently).
-          Pattern per card:
-            - `id` is the slug used by home-page deep-links and the quick-jump nav.
-            - `onClick` on the <li> opens the modal with the card's ProjectData.
-            - Inner <a> links call e.stopPropagation() so clicking a link doesn't
-              also fire the card's modal trigger. */}
+      {/* ============================================================
+          === PASSION PANEL ===
+          Personal projects — things built for fun / learning / portfolio.
+          Card anatomy (re-used in all three panels):
+            <li id={slug} ...onClick={openModal}>
+              <header>     index badge · title · status pill
+              <p .summary> one-line pitch
+              <meta-row>   year + stack chips
+              <actions>    external links (open_repo / open_live)
+            </li>
+          The status pill class drives color in globals.css:
+            - terminal-status-active   = currently being worked on
+            - terminal-status-shipping = released, low-touch maintenance
+            - terminal-status-archived = done, not coming back to it
+          ============================================================ */}
       <section className="terminal-panel" aria-label="Passion terminal panel">
-        {/* Topbar mimics a macOS terminal window: traffic-light dots on the left,
-            a path-style label on the right. Purely decorative; aria-hidden on the dots
-            keeps them out of the accessibility tree. */}
+        {/* Topbar mimics a macOS terminal window: the three "traffic light" dots
+            on the left, a path-style label on the right. Dots are aria-hidden
+            since they're decorative; the path is the only labeled element. */}
         <div className="terminal-topbar">
           <div className="terminal-dots" aria-hidden="true">
             <span />
             <span />
             <span />
           </div>
-          {/* The "user@host:~/dir" prompt is the only labeled thing in the topbar.
-              The .mono class pulls in the monospace font from globals.css. */}
+          {/* `.mono` pulls in the monospace font defined in globals.css. */}
           <p className="terminal-path mono">emilio@portfolio:~/passion</p>
         </div>
 
-        {/* Faux-terminal "command" line — purely decorative, sets the visual tone. */}
+        {/* Faux shell prompt — purely decorative, reinforces the terminal motif. */}
         <p className="terminal-command mono">$ ls -la ./passion</p>
 
-        {/* <ol> rather than <ul> because the index numbers (01, 02, ...) are part
-            of the visual design — order matters semantically here. */}
+        {/* <ol> rather than <ul> because the visible "01, 02, 03..." indices
+            convey order — semantically appropriate. */}
         <ol className="terminal-projects">
-          {/* --- Project 01: mustang market ---
-              Status "active" = currently being built/iterated on.
-              Note: the description and stack here are duplicated below in JSX
-              because the modal needs the structured data and the card needs the
-              rendered text. Keep them in sync if you edit one. */}
+
+          {/* --- Project 01: mustang market -----------------------------------
+              The data passed to setActive() (modal payload) intentionally
+              duplicates fields rendered below in JSX (description, stack, etc.).
+              The card needs them as rendered text; the modal needs them as a
+              structured object. Keep the two in sync when editing. */}
           <li
             id="mustang-market"
             className="terminal-project-card pm-trigger"
@@ -122,21 +175,22 @@ export default function WorkPage() {
               links: [{ label: "open_live →", href: "https://mustang-market.com" }],
             })}
           >
-            {/* Card header: index badge · title · status pill.
-                The status class (terminal-status-active|shipping|archived) drives
-                the pill color in globals.css. */}
+            {/* Card header row: ordinal index · title · status pill. */}
             <header className="terminal-project-head">
               <span className="terminal-project-index mono">01</span>
               <h2>mustang market</h2>
               <span className="terminal-status mono terminal-status-active">active</span>
             </header>
-            {/* One-line pitch shown directly on the card. */}
+
+            {/* One-line elevator pitch shown directly on the card. */}
             <p className="terminal-summary">
               peer-to-peer `.edu`-verified marketplace built for cal poly slo.
             </p>
-            {/* Meta row: year + stack chips. The aria-label on the <ul> gives the
-                stack list a name for screen readers (since the visible "stack:" label
-                is a sibling, not a programmatic association). */}
+
+            {/* Meta row: year + stack chips.
+                aria-label on the inner <ul> gives the stack a programmatic name
+                for screen readers, since the visible "stack:" label is a sibling
+                <p>, not associated via <label for>. */}
             <div className="terminal-meta-row">
               <p className="mono">year: jan 2026</p>
               <p className="mono">stack:</p>
@@ -150,17 +204,20 @@ export default function WorkPage() {
                 <li className="mono">Vercel</li>
               </ul>
             </div>
-            {/* External-link row. stopPropagation prevents the parent <li>'s
-                onClick (which opens the modal) from firing when the user actually
-                wanted to follow the link. target="_blank" + rel="noreferrer" is
-                the standard hardening for new-tab links. */}
+
+            {/* External-link actions row.
+                stopPropagation on each <a> is critical: without it, clicking
+                a link would also fire the parent <li>'s onClick and pop the
+                modal open behind the new tab.
+                target/rel pairing is the standard hardening for new-tab links
+                (rel="noreferrer" implies noopener too). */}
             <div className="terminal-actions">
               <a className="terminal-link mono" href="https://mustang-market.com" target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}>open_live</a>
             </div>
           </li>
 
-          {/* --- Project 02: devsize-plus ---
-              Status "shipping" = built and out, but no longer the daily focus. */}
+          {/* --- Project 02: devsize-plus -------------------------------------
+              Native macOS app — different stack shape from the web projects. */}
           <li
             id="devsize-plus"
             className="terminal-project-card pm-trigger"
@@ -197,9 +254,10 @@ export default function WorkPage() {
             </div>
           </li>
 
-          {/* --- Project 03: swoosh analytics ---
-              No `links` array on this one — there's no public repo/site, so the
-              card has no terminal-actions row. The modal will also render no links. */}
+          {/* --- Project 03: swoosh analytics ---------------------------------
+              Note: NO `links` field in the modal payload and NO terminal-actions
+              row in JSX — this project has no public repo or live URL. The
+              modal will simply render no link buttons. */}
           <li
             id="swoosh-analytics"
             className="terminal-project-card pm-trigger"
@@ -236,9 +294,9 @@ export default function WorkPage() {
             </div>
           </li>
 
-          {/* --- Project 04: energy usage pattern exploration ---
-              Status "archived" = finished, not being touched again. The pill
-              color shifts to a muted tone via .terminal-status-archived. */}
+          {/* --- Project 04: energy usage pattern exploration -----------------
+              Status "archived" — the pill renders in a muted tone via
+              .terminal-status-archived in globals.css. */}
           <li
             id="energy-usage-pattern-exploration"
             className="terminal-project-card pm-trigger"
@@ -276,7 +334,7 @@ export default function WorkPage() {
             </div>
           </li>
 
-          {/* --- Project 05: instagram follower analyzer --- archived utility script. */}
+          {/* --- Project 05: instagram follower analyzer ---------------------- */}
           <li
             id="instagram-follower-analyzer"
             className="terminal-project-card pm-trigger"
@@ -315,8 +373,13 @@ export default function WorkPage() {
         </ol>
       </section>
 
-      {/* === WORK PANEL === client websites I've shipped. Same card pattern as above. */}
+      {/* ============================================================
+          === WORK PANEL ===
+          Paid client websites. Same card pattern as the passion panel —
+          see the comments above for the per-card anatomy.
+          ============================================================ */}
       <section className="terminal-panel" aria-label="Work terminal panel">
+        {/* Same terminal-window chrome; only the path label changes per panel. */}
         <div className="terminal-topbar">
           <div className="terminal-dots" aria-hidden="true">
             <span />
@@ -329,7 +392,12 @@ export default function WorkPage() {
         <p className="terminal-command mono">$ ls -la ./work</p>
 
         <ol className="terminal-projects">
-          {/* Project 01 */}
+
+          {/* --- Project 01: lilianal.com -------------------------------------
+              First card in this panel — its id is the target of the "./work"
+              quick-jump button at the top of the page. Two external links
+              (repo + live), both present in the modal payload AND rendered as
+              separate <a> elements in the actions row. */}
           <li
             id="lilianal-com"
             className="terminal-project-card pm-trigger"
@@ -370,7 +438,7 @@ export default function WorkPage() {
             </div>
           </li>
 
-          {/* Project 02 */}
+          {/* --- Project 02: westcoastbeautyco -------------------------------- */}
           <li
             id="westcoastbeautyco"
             className="terminal-project-card pm-trigger"
@@ -408,8 +476,11 @@ export default function WorkPage() {
         </ol>
       </section>
 
-      {/* === SCHOOL PANEL === currently a single Cal Poly entry; structured as a
-          panel anyway so future coursework / programs slot in without restructuring. */}
+      {/* ============================================================
+          === SCHOOL PANEL ===
+          Currently a single Cal Poly entry. Structured as a full panel
+          anyway so future coursework / programs slot in without restructuring.
+          ============================================================ */}
       <section className="terminal-panel" aria-label="School terminal panel">
         <div className="terminal-topbar">
           <div className="terminal-dots" aria-hidden="true">
@@ -423,7 +494,8 @@ export default function WorkPage() {
         <p className="terminal-command mono">$ ls -la ./school</p>
 
         <ol className="terminal-projects">
-          {/* 01 */}
+
+          {/* --- Cal Poly SLO ------------------------------------------------- */}
           <li
             id="calpoly-slo"
             className="terminal-project-card pm-trigger"
@@ -458,6 +530,9 @@ export default function WorkPage() {
         </ol>
       </section>
 
+      {/* Default-variant footer — sits at the page bottom on /work.
+          (The home page uses <Footer variant="corner" /> inline in its title row;
+          see CLAUDE.md "Cross-file invariants".) */}
       <Footer />
     </main>
   );
