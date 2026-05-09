@@ -2,6 +2,7 @@ import Link from "next/link";
 import Footer from "@/components/footer";
 import StartProjectContact from "@/components/start-project-contact";
 import WorkProjectLink from "@/components/work-project-link";
+import GithubContributions from "@/components/github-contributions";
 
 const projects = [
   {
@@ -81,10 +82,13 @@ export default function Home() {
           <Footer variant="corner" />
         </div>
 
-        <p className="hero-copy">
-          Building software systems, focusing on cyber security, and
-          low-level optimization, all while learning across the full stack.
-        </p>
+        <div className="hero-row">
+          <p className="hero-copy">
+            Building software systems, focusing on cyber security, and
+            low-level optimization, all while learning across the full stack.
+          </p>
+          <GithubContributions />
+        </div>
 
         <div className="hero-actions">
           <Link className="cta-primary" href="/work">
