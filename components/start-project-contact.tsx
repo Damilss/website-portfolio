@@ -66,7 +66,7 @@ export default function StartProjectContact() {
 
       {/* The reveal panel.
           - The `is-open` class drives the open/close transition in globals.css
-            (height + opacity animation, respecting prefers-reduced-motion).
+            (height + opacity animation).
           - aria-hidden mirrors the visual state so the panel is hidden from
             assistive tech when collapsed. */}
       <div
