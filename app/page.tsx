@@ -13,7 +13,7 @@
 //
 // Cross-file invariants this page participates in (see CLAUDE.md):
 //   - Each `projects[].slug` here MUST match a corresponding <li id="..."> on
-//     /work so the `/work#<slug>` deep-link resolves.
+//     /work so the sessionStorage scroll (and hash fallback) resolves correctly.
 //   - The corner-variant Footer is rendered INSIDE the title row (intentional
 //     — see docs/landing-rework.md). The default-variant lives at /work bottom.
 // =============================================================================
@@ -45,7 +45,6 @@ const projects = [
       "Firestore",
       "Vercel",
     ],
-    href: "/work#mustang-market",
   },
   {
     id: "02",
@@ -56,7 +55,6 @@ const projects = [
       "Swift",
       "SwiftUI"
     ],
-    href: "/work#devsize-plus",
   },
   {
     id: "03",
@@ -68,7 +66,6 @@ const projects = [
       "Tailwind CSS",
       "Vercel",
     ],
-    href: "/work#westcoastbeautyco",
   },
   {
     id: "04",
@@ -76,7 +73,6 @@ const projects = [
     name: "energy usage pattern exploration",
     year: "dec 2025",
     tags: ["Python", "Pandas", "NumPy"],
-    href: "/work#energy-usage-pattern-exploration",
   },
   {
     id: "05",
@@ -84,7 +80,6 @@ const projects = [
     name: "instagram follower analyzer",
     year: "jan 2026",
     tags: ["Python", ".JSON"],
-    href: "/work#instagram-follower-analyzer",
   },
 ];
 
