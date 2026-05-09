@@ -30,7 +30,7 @@ This is a small, single-author portfolio. The whole site is three routes plus sh
 
 ### Styling
 
-The entire design system lives in `app/globals.css` (~18 KB): CSS custom properties for color tokens, motion durations/easings, terminal panel chrome, ambient + noise layers, responsive breakpoints, and `prefers-reduced-motion` fallbacks. Class names referenced by components (`portfolio-shell`, `hero-title-row`, `terminal-project-card`, `terminal-status-active|shipping|archived`, `contact-footer-corner`, `start-project-reveal`, etc.) are all defined here. New visual work generally means editing `globals.css` rather than introducing per-component CSS.
+The entire design system lives in `app/globals.css` (~18 KB): CSS custom properties for color tokens, motion durations/easings, terminal panel chrome, ambient + noise layers, and responsive breakpoints. Class names referenced by components (`portfolio-shell`, `hero-title-row`, `terminal-project-card`, `terminal-status-active|shipping|archived`, `contact-footer-corner`, `start-project-reveal`, etc.) are all defined here. New visual work generally means editing `globals.css` rather than introducing per-component CSS.
 
 `docs/landing-rework.md` is the source of truth for design intent: color tokens, motion timings, the Home corner-footer alignment contract, and the rationale for the hand-authored Work cards. Read it before larger visual edits.
 
