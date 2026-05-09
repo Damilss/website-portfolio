@@ -1096,3 +1096,112 @@ a {
   font-size: 0.82rem;
   padding: 0.6rem 1rem;
 }
+
+/* Hero side-by-side row: description + GitHub panel */
+.hero-row {
+  margin-top: clamp(1.25rem, 2.5vw, 1.8rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  align-items: start;
+}
+
+.hero-row > .hero-copy {
+  margin: 0;
+}
+
+.hero-row > .gh-panel {
+  margin: 0;
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .hero-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* GitHub contributions panel (home hero) */
+.gh-panel {
+  width: 100%;
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--terminal-frame);
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+  animation: gh-panel-in 620ms var(--ease-smooth) both;
+}
+
+@keyframes gh-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gh-username {
+  margin-left: auto;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  transition: color var(--micro) var(--ease-smooth);
+}
+
+.gh-username:hover,
+.gh-username:focus-visible {
+  color: var(--text-primary);
+}
+
+.gh-cursor {
+  display: inline-block;
+  width: 0.55ch;
+  margin-left: 0.18rem;
+  color: var(--text-secondary);
+  animation: gh-blink 1.05s steps(2, jump-none) infinite;
+}
+
+@keyframes gh-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.gh-graph-wrap {
+  padding: 1.1rem 0.95rem 1.1rem;
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.gh-graph-wrap::-webkit-scrollbar {
+  height: 6px;
+}
+
+.gh-graph-wrap::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+
+/* Theme overrides for react-github-calendar / react-activity-calendar internals. */
+.gh-graph-wrap .react-activity-calendar {
+  font-family: var(--font-code);
+}
+
+.gh-graph-wrap .react-activity-calendar text {
+  fill: var(--text-muted);
+}
+
+.gh-graph-wrap .react-activity-calendar__count {
+  color: var(--text-secondary);
+  font-family: var(--font-code);
+  font-size: 0.78rem;
+}
+
+.gh-graph-wrap .react-activity-calendar__legend-colors {
+  color: var(--text-muted);
+  font-family: var(--font-code);
+  font-size: 0.74rem;
+}
