@@ -1219,8 +1219,8 @@ a {
    PAGE ENTRANCE ANIMATION
    Used by both .portfolio-shell and .work-page-shell on mount via the
    `animation: page-enter ...` shorthand.
-   NOTE: there's no explicit prefers-reduced-motion override here — if you want
-   to fully disable, add a @media (prefers-reduced-motion: reduce) rule.
+   Motion is intentional — see the @media (prefers-reduced-motion: reduce) block
+   at the bottom of this file for the explicit decision to keep it.
 ============================================================================= */
 @keyframes page-enter {
   from {
@@ -1582,4 +1582,14 @@ a {
   color: var(--text-muted);
   font-family: var(--font-code);
   font-size: 0.74rem;
+}
+
+/* =============================================================================
+   REDUCED MOTION
+   Motion is intentional and core to this design — page entrances, modal
+   animations, hover transitions, and the GitHub cursor blink are kept
+   regardless of the OS "prefers-reduced-motion" setting.
+   This block is explicitly empty to document that decision.
+============================================================================= */
+@media (prefers-reduced-motion: reduce) {
 }
