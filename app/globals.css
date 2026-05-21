@@ -1441,6 +1441,109 @@ a {
   padding: 0.6rem 1rem;
 }
 
+/* -----------------------------------------------------------------------------
+   PROJECT MODAL — EXTENDED DESCRIPTION
+   Optional block rendered below .pm-content when a project has a matching
+   component in descriptions/index.ts. The component itself uses the .pm-extended-*
+   primitives below to lay out its prose, screenshots, and galleries.
+----------------------------------------------------------------------------- */
+
+/* Wraps the extended-description component. Hairline divider on top visually
+   separates the deep dive from the TL;DR short description above. */
+.pm-extended {
+  border-top: 1px solid var(--border);
+  padding: 1.8rem 1.4rem 2.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+/* Each logical section (overview / stack / retro / etc.). Vertical rhythm
+   between sibling sections comes from .pm-extended's `gap`. */
+.pm-extended-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* Section heading — mono caps so it reads like a terminal banner instead of
+   a generic h3, matching the rest of the site's typography. */
+.pm-extended-heading {
+  margin: 0;
+  font-family: var(--font-code);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Body copy inside the extended section. Capped at 68ch (slightly wider than
+   .pm-description's 60ch) since these blocks are meant to be longer reads. */
+.pm-extended-prose {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 68ch;
+  font-size: 0.95rem;
+}
+
+/* Inline emphasis inside prose. */
+.pm-extended-prose a {
+  color: var(--text-primary);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, var(--border));
+  transition: border-color var(--micro) var(--ease-smooth);
+}
+.pm-extended-prose a:hover {
+  border-bottom-color: var(--accent);
+}
+
+/* Screenshot figure — wraps a next/image with a subtle border so it reads as
+   a framed artifact, not bare media. next/image renders a real <img> so the
+   border applies to the rendered element naturally. */
+.pm-screenshot {
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+}
+
+.pm-screenshot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Optional caption below the screenshot. */
+.pm-screenshot-caption {
+  padding: 0.55rem 0.8rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+/* Two-up image row. Stacks to a single column at narrow widths. */
+.pm-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+}
+
+@media (max-width: 720px) {
+  .pm-gallery {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tighten side padding on small viewports so screenshots use more width. */
+@media (max-width: 720px) {
+  .pm-extended {
+    padding: 1.4rem 1rem 1.8rem;
+  }
+}
+
 /* =============================================================================
    HOME HERO ROW — secondary row below the title.
    Layout: [hero copy | github panel] side-by-side at desktop, stacks at mobile.

@@ -24,6 +24,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { extendedDescriptions } from "@/descriptions";
 
 // Public type — the work page imports this so its setActive() calls are typed.
 // Adding a field here means updating every <li onClick={() => setActive({...})}>
@@ -154,6 +155,12 @@ export default function ProjectModal({ project, onClose }: Props) {
   // (e.g. "Mustang Market" → "mustang-market" in the path bar).
   const slug = project.title.toLowerCase().replace(/\s+/g, "-");
 
+  // Look up an extended description component for this project. Keyed by
+  // project.id (which equals the card slug). Undefined when the project
+  // hasn't been written up yet — the modal renders only the short description
+  // in that case, preserving the legacy behavior.
+  const Extended = extendedDescriptions[project.id];
+
   return (
     // Overlay = the dimmed full-screen layer behind the window.
     // - role="dialog" + aria-modal="true" tells assistive tech this is a modal.
@@ -243,6 +250,16 @@ export default function ProjectModal({ project, onClose }: Props) {
             )}
           </div>
         </div>
+
+        {/* Extended description — rendered only when this project has a
+            corresponding entry in descriptions/index.ts. The component owns
+            its own layout (headings, screenshots, galleries) using the
+            .pm-extended* classes defined in globals.css. */}
+        {Extended && (
+          <div className="pm-extended">
+            <Extended />
+          </div>
+        )}
       </div>
     </div>
   );
