@@ -58,6 +58,19 @@ const markdownComponents: Components = {
       </div>
     );
   },
+  // Lazy-load embedded images so multi-image pages stay fast. A plain <img>
+  // (not next/image) because markdown images carry no intrinsic width/height.
+  img({ src, alt }) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={typeof src === "string" ? src : ""}
+        alt={alt ?? ""}
+        loading="lazy"
+        decoding="async"
+      />
+    );
+  },
 };
 
 export default async function WorkDetailPage({
