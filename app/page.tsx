@@ -4,7 +4,7 @@
 // Sections:
 //   1. Hero block — name, tagline, corner footer, hero copy + GitHub graph,
 //      and the two CTAs ("view-work" and "Start a Project").
-//   2. Selected Work — a list of project rows that link into /work#<slug>.
+//   2. Selected Work — project rows that deep-link into the /work finder.
 //
 // This file is a Server Component — note the absence of "use client" at the
 // top. It's just static JSX over a hardcoded `projects` array. The interactive
@@ -12,8 +12,8 @@
 // client components imported in.
 //
 // Cross-file invariants this page participates in (see CLAUDE.md):
-//   - Each `projects[].slug` here MUST match a corresponding <li id="..."> on
-//     /work so the sessionStorage scroll (and hash fallback) resolves correctly.
+//   - Each `projects[].href` points to that project's detail page in the /work
+//     finder (app/work/[...slug]/page.tsx).
 //   - The corner-variant Footer is rendered INSIDE the title row (intentional
 //     — see docs/landing-rework.md). The default-variant lives at /work bottom.
 // =============================================================================
@@ -24,16 +24,13 @@ import WorkProjectLink from "@/components/work-project-link";
 import GithubContributions from "@/components/github-contributions";
 
 // `projects` is the single source of truth for the home-page Selected Work
-// list. Order in this array = render order. Editing here will NOT change the
-// /work page — that page has its own hand-authored cards. When adding a project,
-// remember to:
-//   1. Add an entry here (for the home list).
-//   2. Add a matching <li id={slug}> card on /work (for the detail panel).
-//   3. Make sure `slug` here === `id` there.
+// list. Order in this array = render order. Each entry's `href` deep-links to
+// that project's detail page in the /work finder; the finder itself is driven
+// by the descriptions/ directory, so this list is just a curated shortcut.
 const projects = [
   {
     id: "01",
-      slug: "mustang-market",
+    href: "/work/passion/mustang-market",
     name: "mustang market",
     year: "jan 2026",
     tags: [
@@ -48,7 +45,7 @@ const projects = [
   },
   {
     id: "02",
-    slug: "devsize-plus",
+    href: "/work/passion/devsize-plus",
     name: "devsize-plus",
     year: "mar 2026",
     tags: [
@@ -58,7 +55,7 @@ const projects = [
   },
   {
     id: "03",
-    slug: "westcoastbeautyco",
+    href: "/work/work/westcoastbeautyco-com",
     name: "westcoastbeautyco",
     year: "2024",
     tags: [
@@ -69,14 +66,14 @@ const projects = [
   },
   {
     id: "04",
-    slug: "energy-usage-pattern-exploration",
+    href: "/work/calpoly/csc-101/energy-usage",
     name: "energy usage pattern exploration",
     year: "dec 2025",
     tags: ["Python", "Pandas", "NumPy"],
   },
   {
     id: "05",
-    slug: "instagram-follower-analyzer",
+    href: "/work/passion/instagram-follower-analyzer",
     name: "instagram follower analyzer",
     year: "jan 2026",
     tags: ["Python", ".JSON"],
@@ -142,14 +139,11 @@ export default function Home() {
         <div className="work-list-wrap">
           <p className="work-label">Selected Work</p>
           <ol className="work-list">
-            {/* Each row is a single clickable area. WorkProjectLink wraps a
-                Next <Link> to /work and ALSO writes the slug to sessionStorage,
-                so the work page's mount effect can scroll the right card into
-                view without using a URL hash. See components/work-project-link.tsx
-                and the useEffect in app/work/page.tsx. */}
+            {/* Each row deep-links to the project's detail page in the /work
+                finder. See components/work-project-link.tsx. */}
             {projects.map((project) => (
               <li key={project.id}>
-                <WorkProjectLink slug={project.slug} className="work-row">
+                <WorkProjectLink href={project.href} className="work-row">
                   {/* Index badge on the left (01, 02, ...). */}
                   <span className="work-index mono">{project.id}</span>
 
