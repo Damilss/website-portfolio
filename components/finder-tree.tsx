@@ -110,23 +110,23 @@ function FinderNode({
       </button>
 
       {/* Collapsible container — animated via the grid-template-rows 0fr→1fr
-          trick (see globals.css). `inert` when closed so the hidden children
-          are not focusable or announced to screen readers. */}
-      <div
-        className={`finder-children${isOpen ? " is-open" : ""}`}
-        inert={!isOpen}
-      >
-        <ul className="finder-sublist">
-          {node.children.map((child) => (
-            <FinderNode
-              key={nodeKey(child)}
-              node={child}
-              depth={depth + 1}
-              expanded={expanded}
-              onToggle={onToggle}
-            />
-          ))}
-        </ul>
+          trick (see globals.css). The nested list only exists while open, so
+          collapsed links/buttons leave the tab order and accessibility tree
+          without relying on `inert` browser support. */}
+      <div className={`finder-children${isOpen ? " is-open" : ""}`}>
+        {isOpen && (
+          <ul className="finder-sublist">
+            {node.children.map((child) => (
+              <FinderNode
+                key={nodeKey(child)}
+                node={child}
+                depth={depth + 1}
+                expanded={expanded}
+                onToggle={onToggle}
+              />
+            ))}
+          </ul>
+        )}
       </div>
     </li>
   );
