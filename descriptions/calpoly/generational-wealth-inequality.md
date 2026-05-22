@@ -1,40 +1,50 @@
 [repo link](https://github.com/Damilss/generational-wealth-inequality)
+
 # Generational Wealth Inequality
 
-A one-page ENGL 133 project site about generational wealth inequality in California.
+> A one-page project site for an ENGL 133 research project on wealth inequality in California.
 
-## Tech Stack
+A built-from-scratch one-page site presenting an ENGL 133 research project on
+generational wealth inequality in California. It pairs the writing with data
+visualizations and scroll-driven motion — a research paper reframed as
+something you scroll through.
 
-- Next.js 16 (App Router)
-- React 19
-- TypeScript
-- Tailwind CSS v4
-- Framer Motion
+![The racial wealth gap in California](/work-assets/generational-wealth-inequality/screenshot.jpg)
 
-## Run Locally
+## How it's built
 
-```bash
-npm install
-npm run dev
+It's a single Next.js page driven by section data, with a small reusable
+`ScrollReveal` wrapper that fades and lifts each section into view as you
+scroll — built on Framer Motion's `whileInView`:
+
+```tsx
+export default function ScrollReveal({
+  children, className, delay = 0, duration = 0.7,
+  y = 18, amount = 0.12, once = true,
+}: ScrollRevealProps) {
+  return (
+    <motion.div
+      className={className}
+      initial={{ opacity: 0, y }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once, amount }}
+      transition={{ duration, delay, ease: "easeOut" }}
+    >
+      {children}
+    </motion.div>
+  );
+}
 ```
 
-App runs at `http://localhost:3000`.
+*One small wrapper — every section on the page reveals through it.*
 
-## Scripts
+![State minimum wages, January 2025](/work-assets/generational-wealth-inequality/state-map.jpg)
 
-- `npm run dev` - start local dev server
-- `npm run build` - create production build
-- `npm run start` - run production server
-- `npm run lint` - run ESLint
+## Tech stack
 
-## Project Structure
+- Next.js 16 (App Router), React 19, TypeScript
+- Tailwind CSS v4, Framer Motion
 
-- `app/page.tsx` - single-page content and section data
-- `app/globals.css` - global styles and responsive layout
-- `components/ScrollReveal.tsx` - reusable scroll animation wrapper
-- `public/` - static images used in the page
+## Status
 
-## Notes
-
-- The page includes placeholder text/cards in several sections for ongoing content edits.
-- Metadata title/description live in `app/layout.tsx`.
+Archived — ENGL 133 coursework.
