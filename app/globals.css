@@ -1696,3 +1696,379 @@ a {
 ============================================================================= */
 @media (prefers-reduced-motion: reduce) {
 }
+
+/* =============================================================================
+   TERMINAL FINDER (/work + /work/[...slug])
+   /work is a file-browser over the descriptions/ directory: expandable folder
+   rows + file rows (see components/finder-tree.tsx). Each file links to a detail
+   page that renders its markdown (see app/work/[...slug]/page.tsx).
+============================================================================= */
+
+/* Tree containers — the root list and every nested sublist. */
+.finder-tree,
+.finder-sublist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.14rem;
+}
+
+/* The root tree sits directly inside .terminal-panel; its own padding keeps the
+   rows off the panel edge. */
+.finder-tree {
+  padding: 0.6rem;
+}
+
+.finder-item {
+  display: block;
+}
+
+/* A single row — folder (<button>) or file (<a>). Three columns:
+   disclosure triangle · label · trailing meta (count / overview tag).
+   padding-left grows with --depth (set inline by FinderNode) so nested rows
+   indent. Border defaults transparent so the hover border transitions in
+   without a layout shift — same pattern as .work-row. */
+.finder-row {
+  display: grid;
+  grid-template-columns: 1.05rem minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 0.5rem;
+  width: 100%;
+  text-align: left;
+  border: 1px solid transparent;
+  border-radius: 0.7rem;
+  padding: 0.46rem 0.62rem;
+  padding-left: calc(0.62rem + var(--depth, 0) * 1.15rem);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-code);
+  font-size: 0.84rem;
+  cursor: pointer;
+  transition-property: border-color, background-color, transform, box-shadow;
+  transition-duration: var(--ui);
+  transition-timing-function: var(--ease-standard);
+}
+
+/* Hover/focus — visible border + subtle bg + the recurring 4px translate-right
+   gesture + soft glow. Matches .work-row and .terminal-project-card. */
+.finder-row:hover,
+.finder-row:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 24%, var(--border));
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  transform: translateX(4px);
+  box-shadow: 0 12px 28px -18px var(--accent-glow);
+}
+
+/* Disclosure triangle (folders only). Rotates 90° — pointing down — when open.
+   For file rows the element is empty and just reserves the column for alignment. */
+.finder-disclosure {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.05rem;
+  color: var(--text-muted);
+  font-size: 0.66rem;
+  transition: transform var(--micro) var(--ease-smooth);
+}
+
+.finder-disclosure.is-open {
+  transform: rotate(90deg);
+}
+
+/* Row label — the folder or file name. Ellipsis if it overflows. */
+.finder-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color var(--micro) var(--ease-smooth);
+}
+
+/* Folder names read brighter than file names (directory vs leaf). */
+.finder-row-folder .finder-label {
+  color: var(--text-primary);
+}
+
+.finder-row-file .finder-label {
+  color: var(--text-secondary);
+}
+
+.finder-row:hover .finder-label,
+.finder-row:focus-visible .finder-label {
+  color: var(--text-primary);
+}
+
+/* Empty file — dimmed, so visitors know there's nothing to read yet. */
+.finder-row-file.is-empty .finder-label {
+  color: var(--text-muted);
+}
+
+/* Trailing item count on folder rows ("8 items"). */
+.finder-count {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+/* Small pill on the per-folder overview file (e.g. passion.md).
+   Reuses the .terminal-status pill shape. */
+.finder-overview-tag {
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.1rem 0.4rem;
+  white-space: nowrap;
+}
+
+/* Collapsible children container. The grid-template-rows 0fr→1fr trick animates
+   height without a fixed pixel value — same mechanism as .start-project-reveal.
+   The inner sublist must clip its overflow for the collapse to read cleanly. */
+.finder-children {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--ui) var(--ease-standard);
+}
+
+.finder-children.is-open {
+  grid-template-rows: 1fr;
+}
+
+.finder-children > .finder-sublist {
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* -----------------------------------------------------------------------------
+   DETAIL PAGE (/work/[...slug]) — breadcrumb + rendered markdown.
+----------------------------------------------------------------------------- */
+
+.finder-detail {
+  padding: clamp(1.3rem, 3vw, 2.1rem) clamp(1rem, 2.6vw, 1.7rem)
+    clamp(1.6rem, 3.5vw, 2.4rem);
+}
+
+/* Breadcrumb path above the content. */
+.finder-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  margin-bottom: 1.4rem;
+}
+
+.finder-breadcrumb-part {
+  display: inline-flex;
+  align-items: center;
+}
+
+.finder-breadcrumb-link {
+  color: var(--text-secondary);
+  transition: color var(--micro) var(--ease-smooth);
+}
+
+.finder-breadcrumb-link:hover,
+.finder-breadcrumb-link:focus-visible {
+  color: var(--text-primary);
+}
+
+.finder-breadcrumb-sep {
+  margin: 0 0.3rem;
+  opacity: 0.6;
+}
+
+.finder-breadcrumb-current {
+  color: var(--text-secondary);
+}
+
+/* Empty-file placeholder. */
+.finder-empty {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+/* -----------------------------------------------------------------------------
+   RENDERED MARKDOWN (.finder-md) — react-markdown output on the detail page.
+   Tuned for long-form reading; line length capped like .pm-extended-prose.
+----------------------------------------------------------------------------- */
+
+.finder-md {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-size: 0.95rem;
+  max-width: 74ch;
+}
+
+.finder-md > :first-child {
+  margin-top: 0;
+}
+
+.finder-md > :last-child {
+  margin-bottom: 0;
+}
+
+.finder-md h1,
+.finder-md h2,
+.finder-md h3,
+.finder-md h4 {
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-weight: 530;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  margin: 1.9rem 0 0.75rem;
+}
+
+.finder-md h1 {
+  font-size: clamp(1.5rem, 3.4vw, 2.05rem);
+  letter-spacing: -0.02em;
+}
+
+.finder-md h2 {
+  font-size: clamp(1.2rem, 2.4vw, 1.45rem);
+}
+
+.finder-md h3 {
+  font-size: 1.08rem;
+}
+
+.finder-md h4 {
+  font-size: 0.96rem;
+}
+
+.finder-md p {
+  margin: 0.9rem 0;
+}
+
+.finder-md a {
+  color: var(--text-primary);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, var(--border));
+  transition: border-color var(--micro) var(--ease-smooth);
+}
+
+.finder-md a:hover {
+  border-bottom-color: var(--accent);
+}
+
+.finder-md strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.finder-md ul,
+.finder-md ol {
+  margin: 0.9rem 0;
+  padding-left: 1.4rem;
+}
+
+.finder-md li {
+  margin: 0.32rem 0;
+}
+
+.finder-md li::marker {
+  color: var(--text-muted);
+}
+
+.finder-md blockquote {
+  margin: 1.1rem 0;
+  padding: 0.25rem 0 0.25rem 1rem;
+  border-left: 2px solid color-mix(in srgb, var(--accent) 40%, var(--border));
+  color: var(--text-muted);
+}
+
+.finder-md hr {
+  margin: 1.9rem 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+/* Inline code. */
+.finder-md code {
+  font-family: var(--font-code);
+  font-size: 0.86em;
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  border: 1px solid var(--border);
+  border-radius: 0.34rem;
+  padding: 0.08rem 0.32rem;
+}
+
+/* Fenced code blocks. */
+.finder-md pre {
+  margin: 1.15rem 0;
+  padding: 0.95rem 1.05rem;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  overflow-x: auto;
+}
+
+.finder-md pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+}
+
+/* GFM tables — wrapped in .finder-md-table so they scroll on narrow screens. */
+.finder-md-table {
+  margin: 1.2rem 0;
+  overflow-x: auto;
+}
+
+.finder-md-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+.finder-md-table th,
+.finder-md-table td {
+  border: 1px solid var(--border);
+  padding: 0.48rem 0.7rem;
+  text-align: left;
+}
+
+.finder-md-table th {
+  color: var(--text-primary);
+  font-weight: 600;
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+}
+
+.finder-md-table td {
+  color: var(--text-secondary);
+}
+
+.finder-md img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.2rem 0;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+}
+
+/* -----------------------------------------------------------------------------
+   Finder — mobile (≤ 860px), matching the global breakpoint.
+----------------------------------------------------------------------------- */
+@media (max-width: 860px) {
+  /* Shallower indent so deeply nested nodes don't run off-screen. */
+  .finder-row {
+    padding-left: calc(0.5rem + var(--depth, 0) * 0.78rem);
+    font-size: 0.8rem;
+  }
+
+  .finder-detail {
+    padding: 1.2rem 0.85rem 1.6rem;
+  }
+
+  .finder-md {
+    font-size: 0.92rem;
+  }
+}
