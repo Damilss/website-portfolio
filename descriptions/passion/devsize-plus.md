@@ -1,58 +1,57 @@
 [repo link](https://github.com/Damilss/devsize-plus)
 
 # devsize-plus
-A macOS, client-only disk usage explorer (TreeSize-style) that scans a folder and shows where space is going. Built to be **native** and **fast**: Swift + SwiftUI + Swift Concurrency, no servers, no database.
 
-## Goals
+> A native macOS disk-usage explorer — see where your storage actually went.
 
-- Native macOS app with a TreeSize-like experience
-- 100% client-side (no telemetry, no backend)
+devsize-plus is a TreeSize-style disk explorer for macOS: point it at a folder
+and it scans recursively, aggregates sizes bottom-up, and shows you the biggest
+offenders. It's 100% client-side — no servers, no telemetry, no database — and
+built to feel native and fast with Swift, SwiftUI, and Swift Concurrency.
 
-## Core Features (planned)
+## How it works
 
-**v0**
-- Pick a folder to scan (user-consented access)
-- Async scan with progress + cancel
-- Show children sorted by size
-- Navigate into folders (breadcrumb +/or sidebar tree)
-- Reveal selected item in Finder
-- Open (default app)
-- Quick Look (spacebar preview)
-- Copy Path (POSIX path + file:// URL variants)
-- Copy Size Report (e.g., “Folder X: 12.4 GB, 3,421 items”)
-- Rescan (selected node or root)
-- Move to Trash ✅
+The scanner walks the filesystem and builds an in-memory tree of `FSNode`s —
+each one holds its own size plus its children, and folder sizes aggregate up
+from the leaves. The scan runs as a cancellable async `Task` that reports
+progress, so the UI stays responsive even on huge directories. Access comes
+through a folder picker and security-scoped bookmarks — no Full Disk Access
+required.
 
-**Later**
-- Exclusions (e.g., `.git`, `node_modules`)
-- Search + filters
-- Sort by size/name/modified
-- “Treat packages as files” toggle (e.g., `.app`, `.photoslibrary`)
-- Optional actions (Move to Trash, etc.)
+```swift
+public struct FSNode: Identifiable, Hashable {
+    // A URL makes a stable identity for a filesystem model
+    public var id: URL { url }
 
-## Tech Stack
+    let url: URL
+    let isDirectory: Bool
 
-- **Language:** Swift
-- **UI:** SwiftUI
-- **Concurrency:** async/await, `Task` cancellation
-- **Filesystem:** `FileManager`, `URLResourceValues`
-- **Permissions:** Folder picker + security-scoped bookmarks (no Full Disk Access required)
+    // filled in during the scan
+    var sizeBytes: Int64 = 0
+    var children: [FSNode] = []
 
-## Architecture (high level)
+    var name: String {
+        let last = url.lastPathComponent
+        return last.isEmpty ? url.path : last
+    }
+}
+```
 
-- **Scanner**: Walks the filesystem and builds an in-memory tree of nodes (size aggregates bottom-up).
-- **ViewModel**: Owns scan task state (progress, cancellation, selected node).
-- **SwiftUI Views**: Sidebar tree + main list/table for children, with sorting/filtering.
+*The whole scan is a tree of these — sizes aggregate from the leaves up.*
 
-## Getting Started
+## What it does
 
-1. Install Xcode (latest stable recommended).
-2. Clone the repo:
-   ```bash
-   git clone <repo-url>
-   cd devsize-plus
-   ```
+Scan a folder with live progress and cancel · browse children sorted by size ·
+drill into subfolders · reveal in Finder, Quick Look, open, copy path · move to
+Trash · rescan any node.
 
-## License
+## Tech stack
 
-See `License.md`
+- Swift, SwiftUI
+- Swift Concurrency — `async`/`await` with `Task` cancellation
+- `FileManager` + `URLResourceValues` for the filesystem walk
+- Folder picker + security-scoped bookmarks for sandbox-friendly access
+
+## Status
+
+Shipping — an early, working v0.

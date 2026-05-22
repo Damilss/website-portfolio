@@ -1,59 +1,58 @@
 [repo link](https://github.com/Damilss/westcoastbeautyco.com)
-# West Coast Beauty Co. Website
 
-This is a Next.js website for West Coast Beauty Co., a beauty and wellness brand. The site is built with Next.js, TypeScript, and Tailwind CSS.
+# West Coast Beauty Co.
 
-## Documentation
+> A brand site for a beauty & wellness company — storefront polish, real integrations.
 
-- Contact Form: `docs/contact-form.md`
-- Instagram Feed (Current): `docs/instagram-feed.md`
-- Instagram Feed (Archive): `docs/instagram-third-party-embed-migration.md`
+West Coast Beauty Co. is a marketing and brand website for a beauty and
+wellness company, built with Next.js, TypeScript, and Tailwind CSS. Beyond the
+storefront polish, it wires up two real integrations: a server-side contact
+form and a live Instagram feed.
 
-## Getting Started
+![West Coast Beauty Co.](/work-assets/westcoastbeautyco-com/site.jpg)
 
-1. Install dependencies:
-```bash
-npm install
+## The two integrations
+
+**Contact form** — the `/contact` form is delivered server-side with Resend.
+Submissions land in the brand inbox with the sender's address set as Reply-To,
+so replying just works.
+
+**Instagram feed** — the homepage pulls recent posts from a public Behold JSON
+feed, fetched client-side with no API keys and no server of its own. The fetch
+is abortable and cancels cleanly if the component unmounts mid-request:
+
+```tsx
+useEffect(() => {
+  const controller = new AbortController();
+  let cancelled = false;
+
+  // Recent posts from the public Behold feed — no API keys, no backend
+  fetchBeholdFeed({ feedUrl, limit, signal: controller.signal })
+    .then((payload) => {
+      if (cancelled) return;
+      setItems(payload.items);
+      setProfile(payload);
+    })
+    .catch((error) => {
+      if (cancelled || error.name === "AbortError") return;
+      setHasError(true);
+    });
+
+  return () => {
+    cancelled = true;
+    controller.abort();
+  };
+}, [limit, feedUrl]);
 ```
 
-2. Run the development server:
-```bash
-npm run dev
-```
+*A `cancelled` flag and an `AbortController` together guard against setting state after unmount.*
 
-3. Open:
-```
-http://localhost:3000
-```
+## Tech stack
 
-## Available Scripts
+- Next.js (App Router), React, TypeScript, Tailwind CSS
+- Resend for transactional contact-form email
+- Behold for the public Instagram feed
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
+## Status
 
-## Contact Form Email Delivery
-
-The contact form at `/contact` is sent server-side with Resend.
-
-For implementation details, see `docs/contact-form.md`.
-
-1. Create `.env.local` from `.env.example`.
-2. Set `RESEND_API_KEY` to your Resend API key.
-3. Set `RESEND_FROM_EMAIL` to a sender address on your verified Resend domain.
-
-Current contact delivery settings:
-- To: `Hello@westcoastbeautyco.com`
-- From: `West Coast Beauty Co <${RESEND_FROM_EMAIL}>`
-- Reply-To: submitter email
-
-## Instagram Feed
-
-The homepage Instagram section renders from the public Behold JSON endpoint:
-- `https://feeds.behold.so/jidFIqDLkPBGRR83dk3E`
-
-Notes:
-- No API keys are required.
-- No `.env` configuration is required for the feed.
-- The feed is fetched client-side in `app/components/instagram-feed.tsx`.
+Active — client brand site.

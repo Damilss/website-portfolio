@@ -2,23 +2,24 @@
 
 # Energy Usage Pattern Exploration
 
-A data analysis pipeline built with pandas that processes 70,000+ household
-energy records, performing feature-level analysis and visualization to uncover
-consumption trends across temporal and environmental variables.
+> A pandas pipeline over 70,000+ household energy records.
 
-## Overview
+A data-analysis project that takes a large household energy dataset and works
+it end to end with pandas: cleaning and shaping the raw records, engineering
+features, and visualizing how consumption shifts across time of day, season,
+and environmental conditions.
 
-The project takes a large household energy dataset and works through it end to
-end: cleaning and shaping the raw records, engineering features, and visualizing
-how consumption shifts across time of day, season, and environmental
-conditions.
+## How it works
 
-## Tech Stack
+The pipeline loads 70,000+ records, handles missing and malformed values, then
+derives features and groups the data to surface consumption patterns — turning
+a flat dump of readings into readable trends across temporal and environmental
+variables.
 
-- Python
-- pandas
-- NumPy
+## Tech stack
+
+- Python, pandas, NumPy
 
 ## Status
 
-Archived — a completed coursework exploration, not under active development.
+Archived — a completed coursework exploration.
