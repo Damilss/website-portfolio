@@ -16,19 +16,17 @@
      8.  /work page chrome (.work-page-shell, .work-page-header, nav row).
      9.  Terminal panels (.terminal-panel and friends — used by /work, /404,
          and the GitHub panel).
-     10. Project cards (.terminal-project-card, status pills, stack chips, etc.).
+     10. Terminal action links (.terminal-actions / .terminal-link).
      11. Contact footer (.contact-footer + .contact-footer-corner variant).
      12. /404 (.not-found-shell, .terminal-not-found-*).
      13. Focus-visible outline.
      14. Mobile breakpoint (max-width: 860px).
      15. page-enter keyframes (used by the page shells on mount).
-     16. Project modal (overlay, window, body — opens from /work cards).
-     17. Hero side-by-side row + GitHub panel (graph + cursor blink).
+     16. Hero side-by-side row + GitHub panel (graph + cursor blink).
 
    Intent / source of truth: docs/landing-rework.md documents the design rationale
-   (color tokens, motion timings, the corner-footer alignment contract on home,
-   and why /work cards are hand-authored instead of mapped). Read that before
-   bigger visual changes.
+   (color tokens, motion timings, and the corner-footer alignment contract on
+   home). Read that before bigger visual changes.
 ============================================================================= */
 
 /* Tailwind v4 — single-line import is all that's needed. The PostCSS plugin
@@ -87,13 +85,11 @@
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* --- Composed surfaces ---------------------------------------------------
-     Pre-mixed tokens for terminal-themed components. color-mix lets us derive
+     Pre-mixed token for terminal-themed components. color-mix lets us derive
      a translucent surface from --surface without hard-coding a second color.
        --terminal-frame = the outer panel surface (88% opacity).
-       --terminal-card  = a slightly more transparent card surface (78%).
-     Both composite over the page bg + ambient/noise layers underneath. */
+     It composites over the page bg + ambient/noise layers underneath. */
   --terminal-frame: color-mix(in srgb, var(--surface) 88%, transparent);
-  --terminal-card: color-mix(in srgb, var(--surface) 78%, transparent);
 }
 
 /* Tailwind v4 inline theme — exposes our tokens as Tailwind theme values so
@@ -521,8 +517,8 @@ a {
 }
 
 /* Hover/focus: visible border + subtle bg + 4px translate-right + soft glow.
-   The translate-right gesture is a recurring pattern (also on /work cards) —
-   suggests "this row will lead you somewhere". */
+   The translate-right gesture is a recurring pattern (also on /work finder
+   rows) — suggests "this row will lead you somewhere". */
 .work-row:hover,
 .work-row:focus-visible {
   border-color: color-mix(in srgb, var(--accent) 24%, var(--border));
@@ -810,133 +806,12 @@ a {
   border-bottom: 1px solid var(--border);
 }
 
-/* The list of project cards inside a panel. Reset list defaults; use grid for spacing. */
-.terminal-projects {
-  list-style: none;
-  margin: 0;
-  padding: 0.88rem;
-  display: grid;
-  gap: 0.78rem;
-}
-
 /* =============================================================================
-   PROJECT CARDS (inside terminal panels)
+   TERMINAL ACTION LINKS (.terminal-actions / .terminal-link)
+   Pill-shaped link buttons inside a terminal panel. Used by the /404 page.
 ============================================================================= */
 
-.terminal-project-card {
-  border: 1px solid var(--border);
-  border-radius: 0.85rem;
-  padding: 0.9rem;
-  background: var(--terminal-card);
-  transition-property: border-color, transform, box-shadow, background-color;
-  transition-duration: var(--ui);
-  transition-timing-function: var(--ease-standard);
-}
-
-/* Hover/focus-within (focus-within so keyboard focus on inner links also lights
-   up the card). Same translate-right gesture as .work-row on home. */
-.terminal-project-card:hover,
-.terminal-project-card:focus-within {
-  border-color: color-mix(in srgb, var(--accent) 32%, var(--border));
-  transform: translateX(4px);
-  box-shadow: 0 12px 28px -18px var(--accent-glow);
-}
-
-/* Card header row: index · title · status pill. */
-.terminal-project-head {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  column-gap: 0.72rem;
-}
-
-/* Card index ("01", "02"...). */
-.terminal-project-index {
-  color: var(--text-muted);
-  font-size: 0.8rem;
-}
-
-/* Card title <h2>. */
-.terminal-project-head h2 {
-  margin: 0;
-  font-size: clamp(1rem, 2vw, 1.17rem);
-  font-weight: 500;
-  color: var(--text-primary);
-  font-family: var(--font-ui);
-}
-
-/* -----------------------------------------------------------------------------
-   Status pill — base style, plus three variants by JS class.
-   The variant name in JSX MUST match: terminal-status-{active|shipping|archived}.
------------------------------------------------------------------------------ */
-.terminal-status {
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  padding: 0.19rem 0.45rem;
-  font-size: 0.66rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-muted);    /* fallback if no variant class is present. */
-}
-
-/* "active" = currently being worked on. Brightest text. */
-.terminal-status-active {
-  color: var(--text-primary);
-}
-
-/* "shipping" = released, low-touch maintenance. Mid brightness. */
-.terminal-status-shipping {
-  color: var(--text-secondary);
-}
-
-/* "archived" = done. Dimmest, slightly transparent for a "faded" look. */
-.terminal-status-archived {
-  color: var(--text-muted);
-  opacity: 0.85;
-}
-
-/* Card summary paragraph (the one-liner under the header). */
-.terminal-summary {
-  margin: 0.72rem 0 0;
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
-
-/* Meta row: "year:" + "stack:" labels + the chip list. flex-wrap so chips
-   flow to a second line if needed. */
-.terminal-meta-row {
-  margin-top: 0.72rem;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.42rem 0.65rem;        /* row-gap column-gap. */
-}
-
-.terminal-meta-row p {
-  margin: 0;
-  font-size: 0.76rem;
-  color: var(--text-muted);
-}
-
-/* Stack chip list (technologies). Same chip pattern as .work-tags. */
-.terminal-stack {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.34rem;
-}
-
-.terminal-stack li {
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 0.14rem 0.42rem;
-  font-size: 0.67rem;
-  color: var(--text-muted);
-}
-
-/* Actions row at the bottom of a card (open_repo / open_live links). */
+/* Row holding the link buttons. */
 .terminal-actions {
   margin-top: 0.82rem;
   display: flex;
@@ -1178,17 +1053,6 @@ a {
     flex-direction: column;
   }
 
-  /* Project card head: drop to two columns, let the status pill wrap below. */
-  .terminal-project-head {
-    grid-template-columns: 2.2rem minmax(0, 1fr);
-    row-gap: 0.4rem;
-  }
-
-  .terminal-status {
-    grid-column: 2;
-    justify-self: start;
-  }
-
   /* Contact footer: stack label above links. */
   .contact-footer-main {
     align-items: flex-start;
@@ -1233,212 +1097,6 @@ a {
     transform: translateY(0);
     filter: blur(0);
   }
-}
-
-/* ── project modal ─────────────────────────────────── */
-/* =============================================================================
-   PROJECT MODAL (.pm-*)
-   The full-screen overlay opened from clicking a /work card.
-   See components/project-modal.tsx for the JSX structure.
-============================================================================= */
-
-/* Cursor hint — applied to <li>s on /work that act as modal triggers. */
-.pm-trigger {
-  cursor: pointer;
-}
-
-/* Overlay fades in. */
-@keyframes pm-overlay-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-/* Window animates in with a slight rise + scale + de-blur — feels lift-in. */
-@keyframes pm-window-in {
-  from { opacity: 0; transform: translateY(16px) scale(0.97); filter: blur(6px); }
-  to   { opacity: 1; transform: translateY(0)    scale(1);    filter: blur(0); }
-}
-
-/* The dimmed full-screen layer behind the modal window.
-   - position: fixed + inset: 0 covers the whole viewport.
-   - z-index: 100 to sit above all page content.
-   - overflow-y: auto so the modal can be scrolled if it overflows.
-   - backdrop-filter blurs whatever's behind it for visual depth. */
-.pm-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: clamp(1rem, 2vw, 1.5rem) clamp(1rem, 4vw, 3rem);
-  background: rgba(7, 10, 14, 0.12);
-  backdrop-filter: blur(3px);
-  overflow-y: auto;
-  animation: pm-overlay-in 200ms var(--ease-smooth) both;
-}
-
-/* The actual content card. flex-shrink: 0 so it doesn't squish in the flex
-   parent when its content is taller than the viewport. */
-.pm-window {
-  width: min(100%, 64rem);
-  flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 1.1rem;
-  background: var(--surface);
-  /* Two-stack shadow: inner highlight + outer dropshadow. */
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
-    0 32px 64px -24px rgba(0, 0, 0, 0.3);
-  animation: pm-window-in 300ms var(--ease-smooth) both;
-}
-
-/* Modal topbar — same dot-pattern + path as the panel topbars elsewhere,
-   with an "esc" close button on the right. */
-.pm-topbar {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  border-bottom: 1px solid var(--border);
-  padding: 0.7rem 0.9rem;
-}
-
-/* Modal path label — flex: 1 lets it absorb leftover space, pushing the
-   close button to the far right. */
-.pm-path {
-  margin: 0;
-  flex: 1;
-  color: var(--text-muted);
-  font-size: 0.76rem;
-}
-
-/* The "esc" button. Custom styled (not .terminal-link) because it's a <button>
-   not an <a>, and needs reset background:transparent. */
-.pm-close {
-  font-size: 0.68rem;
-  letter-spacing: 0.1em;
-  color: var(--text-muted);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 0.18rem 0.55rem;
-  background: transparent;
-  cursor: pointer;
-  transition-property: color, border-color;
-  transition-duration: var(--micro);
-  transition-timing-function: var(--ease-smooth);
-  font-family: var(--font-code);
-}
-
-.pm-close:hover {
-  color: var(--text-primary);
-  border-color: color-mix(in srgb, var(--accent) 32%, var(--border));
-}
-
-/* Modal command line ("$ cat README.md") — styled identically to .terminal-command. */
-.pm-command {
-  margin: 0;
-  padding: 0.72rem 0.9rem;
-  color: var(--text-secondary);
-  font-size: 0.8rem;
-  border-bottom: 1px solid var(--border);
-}
-
-/* Modal body container. Currently just a flex column for future expansion. */
-.pm-body {
-  display: flex;
-  flex-direction: column;
-}
-
-/* The actual content block (title, description, stack, actions). */
-.pm-content {
-  padding: 1.8rem 1.4rem 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
-}
-
-/* Title row: project title + status pill side-by-side, wraps on narrow widths. */
-.pm-title-row {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-/* Modal h2 — bigger than .terminal-project-head h2 since the modal is more focused. */
-.pm-title {
-  margin: 0;
-  font-size: clamp(1.3rem, 3vw, 1.9rem);
-  font-weight: 520;
-  letter-spacing: -0.02em;
-  font-family: var(--font-ui);
-  color: var(--text-primary);
-}
-
-/* Year label inside the modal. */
-.pm-year {
-  margin: 0;
-  font-size: 0.78rem;
-  color: var(--text-muted);
-}
-
-/* Description — capped at 60ch for readability. */
-.pm-description {
-  margin: 0;
-  color: var(--text-secondary);
-  line-height: 1.65;
-  max-width: 60ch;
-}
-
-/* Stack row: "stack:" label + the chip list. baseline alignment so the label
-   sits nicely with the first chip's text. */
-.pm-stack-row {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-}
-
-.pm-stack-label {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  flex: 0 0 auto;              /* never shrink. */
-}
-
-.pm-stack {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
-
-/* Stack chip in the modal. Slightly more contrast than the card-version chips
-   since the modal background is opaque. */
-.pm-stack-chip {
-  font-size: 0.72rem;
-  color: var(--text-secondary);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 0.18rem 0.55rem;
-  background: color-mix(in srgb, var(--surface) 70%, transparent);
-}
-
-/* Modal action row — same flex-wrap pattern as the card version. */
-.pm-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-top: 0.3rem;
-}
-
-/* Action CTA inside the modal. Slightly larger than .terminal-link since the
-   modal context allows for more visual weight. */
-.pm-cta {
-  font-size: 0.82rem;
-  padding: 0.6rem 1rem;
 }
 
 /* =============================================================================
@@ -1648,7 +1306,7 @@ a {
 }
 
 /* Hover/focus — visible border + subtle bg + the recurring 4px translate-right
-   gesture + soft glow. Matches .work-row and .terminal-project-card. */
+   gesture + soft glow. Matches .work-row. */
 .finder-row:hover,
 .finder-row:focus-visible {
   border-color: color-mix(in srgb, var(--accent) 24%, var(--border));
@@ -1709,8 +1367,7 @@ a {
   white-space: nowrap;
 }
 
-/* Small pill on the per-folder overview file (e.g. passion.md).
-   Reuses the .terminal-status pill shape. */
+/* Small pill on the per-folder overview file (e.g. passion.md). */
 .finder-overview-tag {
   font-size: 0.58rem;
   letter-spacing: 0.1em;

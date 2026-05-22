@@ -35,7 +35,7 @@ This is a small, single-author portfolio. The whole site is a handful of routes 
 
 ### Styling
 
-The entire design system lives in `app/globals.css` (~62 KB): CSS custom properties for color tokens, motion durations/easings, terminal panel chrome, ambient + noise layers, and responsive breakpoints. Class names referenced by components (`portfolio-shell`, `hero-title-row`, `work-page-shell`, `terminal-panel`, `contact-footer-corner`, `start-project-reveal`, `gh-panel`, `finder-tree` / `finder-row` / `finder-md`, etc.) are all defined here. New visual work generally means editing `globals.css` rather than introducing per-component CSS.
+The entire design system lives in `app/globals.css` (~50 KB): CSS custom properties for color tokens, motion durations/easings, terminal panel chrome, ambient + noise layers, and responsive breakpoints. Class names referenced by components (`portfolio-shell`, `hero-title-row`, `work-page-shell`, `terminal-panel`, `contact-footer-corner`, `start-project-reveal`, `gh-panel`, `finder-tree` / `finder-row` / `finder-md`, etc.) are all defined here. New visual work generally means editing `globals.css` rather than introducing per-component CSS.
 
 ### Cross-file invariants to preserve
 
