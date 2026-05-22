@@ -195,4 +195,4 @@ This repository is **proprietary** and **not open source**.
 
 See `LICENSE.md` for the full, legally binding terms.
 
-(link)[mustang-market.com]
+[mustang-market.com](https://mustang-market.com)
