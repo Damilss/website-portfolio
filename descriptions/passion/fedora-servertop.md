@@ -1,1 +1,1 @@
-(repo link)[https://github.com/Damilss/fedora-servertop]
+[repo link](https://github.com/Damilss/fedora-servertop)

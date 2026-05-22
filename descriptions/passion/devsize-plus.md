@@ -1,4 +1,4 @@
-(repo link)[https://github.com/Damilss/devsize-plus]
+[repo link](https://github.com/Damilss/devsize-plus)
 
 # devsize-plus
 A macOS, client-only disk usage explorer (TreeSize-style) that scans a folder and shows where space is going. Built to be **native** and **fast**: Swift + SwiftUI + Swift Concurrency, no servers, no database.

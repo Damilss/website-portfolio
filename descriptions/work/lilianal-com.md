@@ -1,8 +1,8 @@
-(repo link)[https://github.com/Damilss/lilianal.com]
+[repo link](https://github.com/Damilss/lilianal.com)
 
-(deployment link)[https://lilianal-hlbbpsikj-damilss-projects.vercel.app/]
+[deployment link](https://lilianal-hlbbpsikj-damilss-projects.vercel.app/)
 
-(intended link)[https://lilianal.com]
+[intended link](https://lilianal.com)
 
 # Personal Website Project (Client)
 

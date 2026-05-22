@@ -1,4 +1,4 @@
-(repo link)[https://github.com/Damilss/project1-aweeklynumber]
+[repo link](https://github.com/Damilss/project1-aweeklynumber)
 
 # project1-aweeklynumber
 

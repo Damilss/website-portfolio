@@ -1,4 +1,4 @@
-(repo link)(https://github.com/TobiasH453/AIsore)
+[repo link](https://github.com/TobiasH453/AIsore)
 
 # AIsore
 

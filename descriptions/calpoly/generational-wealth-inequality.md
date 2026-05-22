@@ -1,4 +1,4 @@
-(repo link)[https://github.com/Damilss/generational-wealth-inequality]
+[repo link](https://github.com/Damilss/generational-wealth-inequality)
 # Generational Wealth Inequality
 
 A one-page ENGL 133 project site about generational wealth inequality in California.

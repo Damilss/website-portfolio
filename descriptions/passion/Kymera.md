@@ -1,4 +1,4 @@
-(repo link)[https://github.com/Damilss/Kymera]
+[repo link](https://github.com/Damilss/Kymera)
 # 4-Year Plan — Privacy Browser Project
 
 ## Project Vision

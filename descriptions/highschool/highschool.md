@@ -1,6 +1,6 @@
-(deployed link)[https://damilss.github.io/ap-cs-project-site/]
+[deployed link](https://damilss.github.io/ap-cs-project-site/)
 
-(repo link)[https://github.com/Damilss/ap-cs-project-site]
+[repo link](https://github.com/Damilss/ap-cs-project-site)
 
 # Personal project Porfolio 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -12,7 +12,7 @@
 **Dependencies**: None as of *12/31/2025*
 --- 
 
-**Landing Page**: [index.html][../app/index.html]
+**Landing Page**: `index.html`
 ---
 
 **NOTE**: This project was worked on in 2022, See Commit history and PR's. 

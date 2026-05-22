@@ -1,4 +1,4 @@
-(repo link)[https://github.com/Damilss/225-asgn2]
+[repo link](https://github.com/Damilss/225-asgn2)
 
 # CPE 225 - Assignment 2: CountOnes in C and RISC-V Assembly
 

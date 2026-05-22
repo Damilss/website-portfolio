@@ -1,1 +1,1 @@
-(repo link)[https://github.com/Damilss/lab2]
+[repo link](https://github.com/Damilss/lab2)
