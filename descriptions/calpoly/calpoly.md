@@ -9,10 +9,10 @@ project.
 
 - **csc-101** — Fundamentals of Computer Science.
 - **csc-202** — Data Structures.
-- **csc-203** — Project-Based Object-Oriented Programming: labs and projects, Practicing Encapsulation, polymorphism, and inheritance + much more.
-  including a grid-based Rock Paper Scissors simulation and a weekly-calendar
-  event system.
-- **cpe-225** — Computer Organization: C and RISC-V assembly assignments. Translating Assembly to C
+- **csc-203** — Project-Based Object-Oriented Programming: labs and projects
+  practicing encapsulation, polymorphism, and inheritance — including a
+  grid-based Rock Paper Scissors simulation and a weekly-calendar event system.
+- **cpe-225** — Computer Organization: C programs translated into RISC-V assembly.
 - **generational-wealth-inequality** — a one-page project site built for ENGL
   133, on generational wealth inequality in California.
 
