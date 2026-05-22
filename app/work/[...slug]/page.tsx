@@ -42,10 +42,16 @@ export async function generateMetadata({
 // Custom element renderers for the markdown body.
 const markdownComponents: Components = {
   // External links open in a new tab; in-page links stay in-page.
-  a({ href, children }) {
+  a({ href, children, ...props }) {
+    const anchorProps = { ...props };
+    delete anchorProps.node;
     const external = typeof href === "string" && /^https?:\/\//i.test(href);
     return (
-      <a href={href} {...(external ? { target: "_blank", rel: "noreferrer" } : {})}>
+      <a
+        {...anchorProps}
+        href={href}
+        {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
+      >
         {children}
       </a>
     );
