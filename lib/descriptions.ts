@@ -88,9 +88,17 @@ function walkDir(absDir: string, segments: string[]): TreeNode[] {
   return [...overview, ...folders, ...files];
 }
 
+// The walked tree is memoized at module scope. A single Next build runs
+// generateStaticParams, generateMetadata, and every detail-page render in one
+// process — without this cache each helper below re-walks the whole
+// descriptions/ directory. Trade-off: in `next dev` a newly added descriptions/
+// file needs a dev-server restart to appear.
+let treeCache: TreeNode[] | null = null;
+
 // Build the whole descriptions/ tree (top-level folders + any root-level files).
 export function buildDescriptionsTree(): TreeNode[] {
-  return walkDir(DESCRIPTIONS_ROOT, []);
+  if (treeCache === null) treeCache = walkDir(DESCRIPTIONS_ROOT, []);
+  return treeCache;
 }
 
 // Flat list of every markdown file's slug — for generateStaticParams.

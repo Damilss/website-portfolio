@@ -51,6 +51,8 @@ A macOS, client-only disk usage explorer (TreeSize-style) that scans a folder an
    ```bash
    git clone <repo-url>
    cd devsize-plus
-   
-   #LICENSE
-   See `Licesne.md` 
+   ```
+
+## License
+
+See `License.md`

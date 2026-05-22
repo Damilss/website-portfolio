@@ -72,7 +72,10 @@ export default async function WorkDetailPage({
   // Belt-and-suspenders alongside dynamicParams=false.
   if (!node || raw === null) notFound();
 
-  const body = raw.trim();
+  // "Empty" matches the finder tree's definition (lib/descriptions.ts isEmpty:
+  // a 0-byte file) so a file is never shown as empty in one place but not the
+  // other. raw.length === 0 is exactly equivalent to the tree's size === 0.
+  const isEmpty = raw.length === 0;
 
   return (
     <main className="work-page-shell">
@@ -123,7 +126,11 @@ export default async function WorkDetailPage({
             ))}
           </nav>
 
-          {body ? (
+          {isEmpty ? (
+            <p className="finder-empty mono">
+              {`// ${node.name} is empty — nothing documented here yet.`}
+            </p>
+          ) : (
             <article className="finder-md">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
@@ -132,10 +139,6 @@ export default async function WorkDetailPage({
                 {raw}
               </ReactMarkdown>
             </article>
-          ) : (
-            <p className="finder-empty mono">
-              {`// ${node.name} is empty — nothing documented here yet.`}
-            </p>
           )}
         </div>
       </section>
