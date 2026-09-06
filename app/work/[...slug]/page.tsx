@@ -96,6 +96,10 @@ export default async function WorkDetailPage({
   // other. raw.length === 0 is exactly equivalent to the tree's size === 0.
   const isEmpty = raw.length === 0;
 
+  // Links back to the finder carry this file's slug so /work can re-open the
+  // folders it lives in — see the ?from= handling in components/finder-tree.tsx.
+  const finderHref = `/work?from=${encodeURIComponent(slug.join("/"))}`;
+
   return (
     <main className="work-page-shell">
       <div className="ambient-layer" aria-hidden="true" />
@@ -104,7 +108,7 @@ export default async function WorkDetailPage({
       {/* Back-to-finder link, styled like the /work nav. */}
       <div className="work-page-header">
         <div className="work-nav-row">
-          <Link className="work-back-link mono" href="/work">
+          <Link className="work-back-link mono" href={finderHref}>
             cd .. /work
           </Link>
         </div>
@@ -128,7 +132,7 @@ export default async function WorkDetailPage({
           {/* Breadcrumb path. `work` links to the finder; folder segments are
               plain text (folders are not navigable routes). */}
           <nav className="finder-breadcrumb mono" aria-label="Breadcrumb">
-            <Link href="/work" className="finder-breadcrumb-link">
+            <Link href={finderHref} className="finder-breadcrumb-link">
               work
             </Link>
             {slug.map((segment, index) => (
