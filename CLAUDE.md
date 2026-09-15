@@ -44,6 +44,19 @@ The entire design system lives in `app/globals.css` (~50 KB): CSS custom propert
 - Home uses `<Footer variant="corner" />` inside the title row; Work uses the default variant at the page bottom.
 - Contact email appears in two places: `components/footer.tsx` (`mailto:` link) and `components/start-project-contact.tsx` (`PROJECT_EMAIL`). Update both together.
 
+### Authoring `descriptions/` content
+
+Behavior lives in `lib/descriptions.ts` and `app/work/[...slug]/page.tsx`:
+
+- **Overview files.** A file whose name matches its parent folder (case-insensitive), e.g. `passion/passion.md`, is flagged `isOverview`: it sorts first in that folder and gets an "overview" tag in the finder. Folder order is overview → sub-folders → files, each alphabetical (case-insensitive).
+- **Slugs are literal filenames**, so URLs are case-sensitive (`/work/passion/AIsore`, `/work/passion/OpenHours`).
+- **Skipped entries:** dotfiles (e.g. stray `.DS_Store`) and any non-`.md` file.
+- **Empty files:** a 0-byte `.md` still gets a route; the tree dims it and the detail page shows a "nothing documented here yet" placeholder. A whitespace-only file is *not* empty.
+- **Images** go in `public/work-assets/<project>/` and are referenced with a root-absolute path (`![alt](/work-assets/<project>/file.png)`). They render as plain lazy-loaded `<img>`, not `next/image`. Absolute `http(s)` links open in a new tab.
+- **Dev-server restart required.** The walked tree is memoized at module scope, so under `npm run dev` adding, renaming, or deleting a `descriptions/` file doesn't appear until the dev server restarts. Content edits to an existing file show up on refresh.
+
 ## Repo conventions
 
-From `.claude/rules.md`: prefer minimal changes, don't break existing behavior, explain before large edits, keep files modular.
+From `.claude/rules.md` (local only — `.claude/` is gitignored): prefer minimal changes, don't break existing behavior, explain before large edits, keep files modular.
+
+**Stale docs — trust the code.** `README.md` is outdated (describes `/work` as hand-authored cards and links `docs/landing-rework.md`). `app/page.tsx` comments also cite `docs/landing-rework.md`, which does not exist, and its header comment calls `WorkProjectLink` a client component — it isn't.
