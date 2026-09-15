@@ -113,8 +113,8 @@ export default function Home() {
         {/* Hero secondary row: pitch copy + GitHub contribution graph side-by-side. */}
         <div className="hero-row">
           <p className="hero-copy">
-            Building software systems, focusing on cyber security, and
-            low-level optimization, all while learning across the full stack.
+            Building software systems, and low-level programming, 
+            all while learning across the full stack.
           </p>
           <GithubContributions />
         </div>
