@@ -113,8 +113,9 @@ export default function Home() {
         {/* Hero secondary row: pitch copy + GitHub contribution graph side-by-side. */}
         <div className="hero-row">
           <p className="hero-copy">
-            Building software systems, focusing on cyber security, and
-            low-level optimization, all while learning across the full stack.
+            Hi, I'm Emilio. I'm currently pursuing Computer Engineering, building and 
+            learning across both software and hardware while deeply exploring both stacks.
+            I'm passionate about DevOps, low-level systems, and security.
           </p>
           <GithubContributions />
         </div>
