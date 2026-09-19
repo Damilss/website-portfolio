@@ -1,198 +1,86 @@
-# Mustang Market Mobile
-
-React Native (Expo) app for Mustang Market - Cal Poly's student marketplace.
-
-## Features
-
-- 📱 Native iOS & Android apps
-- 🔐 Cal Poly email authentication
-- 🛍️ Browse and search listings
-- 💾 Save/bookmark listings
-- 👤 User profiles with ratings
-- 📂 Multiple listing types (Products, Services, Rideshare, Housing)
-
-## Tech Stack
-
-- **Expo** (SDK 54) - React Native framework
-- **Expo Router** - File-based navigation
-- **Firebase** - Auth, Firestore, Storage
-- **NativeWind** - Tailwind CSS for React Native
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+
-- npm or yarn
-- Expo Go app on your phone (for development)
-
-### Installation
-
-1. Clone this repository
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Create your environment file:
-   ```bash
-   cp .env.example .env
-   ```
-
-4. Fill in your Firebase credentials in `.env`
-
-5. Start the development server:
-   ```bash
-   npx expo start
-   ```
-
-6. Scan the QR code with Expo Go (Android) or Camera app (iOS)
-
-## Project Structure
-
-```
-├── app/                    # Expo Router screens
-│   ├── (tabs)/            # Tab navigation
-│   │   ├── index.tsx      # Browse/Home
-│   │   ├── messages.tsx   # Messages
-│   │   ├── create.tsx     # Create listing
-│   │   ├── saved.tsx      # Saved listings
-│   │   └── profile.tsx    # User profile
-│   ├── listing/[id].tsx   # Listing detail
-│   ├── login.tsx          # Authentication
-│   └── _layout.tsx        # Root layout
-├── src/
-│   ├── components/        # Reusable components
-│   ├── contexts/          # React contexts (Auth)
-│   ├── lib/               # Firebase, types, utilities
-│   └── constants/         # App constants
-├── assets/                # Images, fonts
-└── app.json               # Expo config
-```
-
-## Firebase Setup
-
-This app shares the same Firebase backend as the web app. Make sure your Firebase project has:
-
-1. **Authentication** enabled with Email/Password provider
-2. **Firestore** with the following collections:
-   - `listings`
-   - `users`
-   - `savedListings`
-   - `conversations`
-   - `requests`
-3. **Storage** bucket for images
-4. Appropriate security rules
-
-## Building for Production
-
-### Development Build
-```bash
-npx expo run:ios
-npx expo run:android
-```
-
-### Production Build (EAS)
-```bash
-npm install -g eas-cli
-eas build --platform all
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## License
-
-MIT
-
-
+---
+title: Mustang Market
+summary: A peer-to-peer marketplace for verified Cal Poly students, built as a Next.js PWA and an Expo iOS app on a shared Firebase backend.
+period: "Jan 2026 – present"
+status: active
+tags: [Next.js, TypeScript, Firebase, Cloud Firestore, React Native, Expo]
+live: https://mustang-market.com
+role: Co-founder, full-stack
+featured: 2
 ---
 
-# 🐎 Mustang Market
----
-[Mobile Repository](https://github.com/cedmonston22/mustang-market-mobile)
----
-### The Secure, Exclusive Marketplace for the Cal Poly Community.
-Mustang Market is a peer-to-peer marketplace designed specifically for Cal Poly students. It eliminates the "sketchiness" of public marketplaces by requiring `@calpoly.edu` verification and using a __Digital Handshake (QR Scan)__ to ensure safe, guaranteed transactions.
+Mustang Market is a peer-to-peer marketplace for the Cal Poly student community. I co-founded it
+in January 2026 as one of three founders. Sign-in is restricted to `@calpoly.edu` accounts, so
+every buyer and seller is a verified student, and the whole flow is built around meeting on
+campus: students post products, services, rideshare routes, and housing, negotiate in real-time
+chat, hand the item off in person, and rate each other afterward. It is an independent student
+project, not a Cal Poly service, and it deliberately does not handle money — buyers and sellers
+settle up between themselves however they agree.
 
-## 🛠 Tech Stack
-- Frontend: Next.js 14+ (App Router), Tailwind CSS, TypeScript
-- Backend/Auth: Firebase (Firestore, Authentication, Storage)
-- Payments: Stripe Connect (Express) for Escrow & Payouts
-- Mobile: Currently PWA (Progressive Web APP) but eventually moving to React Native / Expo on mustang-market-mobile
+![Mustang Market app icon](/work-assets/mustang-market/icon.png)
 
-## ⚡ The "Easy" User Flow (MVP)
-1. List (Seller)
-- Student uploads item photos, description, and price.
-- Listing is tagged by campus location (e.g., PCV, Red Bricks, Yosemite).
+## How it works
 
-2. Secure (Buyer)
-- Buyer clicks "Secure Purchase" and pays via the app.
-- The Vault: Funds are held in escrow by the platform.
-- A private chat opens _after the buyer pays_ for the Buyer and Seller to coordinate a meetup.
+We run two clients against one Firebase project. The web app is Next.js 16 on the App Router with
+React 19, strict TypeScript, and Tailwind CSS 4, deployed to Vercel as an installable PWA — 21 page
+routes and 4 API route modules, with privileged writes going through Server Actions and the
+Firebase Admin SDK. The mobile app is Expo SDK 54 on React Native with Expo Router: 30 screens
+backed by 10 Cloud Functions. Both clients read and write the same Cloud Firestore data. Both
+repositories are private, so there is no repo link here.
 
-3. Exchange (The Handshake)
-- Parties meet at agreed upon location.
-- Buyer inspects the item.
-- The Trigger: Seller shows a unique QR code -> Buyer scans it in-app.
+Trust comes from identity rather than from holding money. On web, sign-in is Firebase Auth with
+Microsoft OAuth plus a Cal Poly domain check; on mobile, Microsoft SSO or Apple Sign In is followed
+by a six-digit code mailed to the student's campus address, which expires after ten minutes and is
+throttled to three requests per ten-minute window. A listing moves from active to sold to
+completed: the seller marks it sold and selects the buyer from the people who messaged them, the
+buyer confirms receipt, and each side can then leave a 1–5 star rating that rolls into the average
+shown on their profile. Listing text is screened by an LLM before it goes live, and the first photo
+can optionally prefill title, description, category, condition, and a suggested price.
 
-4. Payout
-- The scan confirms the item was received.
-- Split: 95% to Seller / 5% Service Fee to Mustang Market.
+## My part
 
-## 🔐 Safety & Trust Guardrails
-- Edu-Only: Firebase Auth rules strictly block any email not ending in @calpoly.edu.
-- Escrow: Sellers are never "ghosted" without payment, and Buyers never pay for a broken item.
-- Reputation: Every transaction builds a "Campus Trust Score" visible on user profiles.
+The original search only filtered the 50 listings the browser had already loaded, so anything on a
+later page was invisible. Firestore has no full-text search, so I put the index on the listing
+itself: at write time its text is normalized and tokenized, every token also emits its 2-to-12
+character prefixes, and the result is capped at 180 terms per document. A query is tokenized the
+same way and capped at 10 terms — Firestore's `array-contains-any` limit — then run across all
+active inventory with cursor pagination. Each page is scored in the client on match quality (exact
+title, title prefix, title/category/description hits, number of matched terms) plus a freshness
+boost that decays with age. Existing listings had no index, so I also wrote an idempotent Admin SDK
+migration that walks them 200 documents at a time and rewrites only the records whose derived index
+actually changed, which makes it safe to re-run.
 
-## 🚀 Getting Started
-1. Clone & Install:
-```bash
-Bashgit clone https://github.com/your-repo/mustang-market.git
-npm install
-```
+Earlier, in January, I built the first real-time messaging layer: a conversation ID derived
+deterministically from the listing and the two sorted user IDs, so a buyer and seller can never end
+up with duplicate threads; snapshot listeners for live inbox and message updates; a per-user read
+timestamp compared against the conversation's last-message time to drive an unread-conversations
+badge; and bounded queries so the inbox never pulls unbounded history. Teammates later layered
+offers, reactions, unsend, and push notifications on top of it. I then built ratings and reviews
+end to end — 1–5 stars with an optional review truncated to 500 characters, authenticated routes
+that verify the caller really is the buyer or seller on that listing, duplicate-submission
+protection, and a Firestore transaction that updates the ratee's average and count atomically. To
+cut drive-by ratings, neither party can rate until both have sent at least five messages in the
+thread. That gate is a heuristic, not proof that a handoff happened.
 
-45: 2. Environment Variables: Create a `.env.local` with your Firebase and Stripe keys.
-   ```env
-   # Firebase Config
-   NEXT_PUBLIC_FIREBASE_API_KEY=...
-   NEXT_PUBLIC_FIREBASE_PROJECT_ID=...
-   
-   # Stripe Config
-   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
-   STRIPE_SECRET_KEY=sk_test_...
-   STRIPE_WEBHOOK_SECRET=whsec_...
-   STRIPE_PLATFORM_FEE_PERCENT=10
-   ```
+Two smaller pieces on web: the PWA install funnel, which is a custom install banner plus an
+instructions page that detects the visitor's platform and shows separate steps for iOS/iPadOS
+Safari, Android Chrome, and desktop; and a 38-file strict-TypeScript cleanup in April that replaced
+unsafe `any` paths with concrete location and error types, moved derived map URLs into memoized
+computation, made browser-relative timestamps client-safe, and fixed the server/client hydration
+mismatches those timestamps were causing. On mobile I set up the initial Expo repository and its
+Firebase client foundation in January; a co-founder built most of the native app from there, took
+it through TestFlight in February, and pushed the first App Store build in March 2026.
 
-3. Run Development:
-```bash
-npm run dev
-```
-## 📈 Monetization Strategy
-- Service Fee: A 5% "Trust & Protection" fee on all digital transactions.
+## Highlights
 
-ideas for later:
-- Mustang Boost: $1.99 to pin a listing to the top of the feed for 24 hours.
-- Sponsored Posts: Local SLO businesses (coffee shops, bike repair) promoting to students.
---- 
-See [docs.md](DOCS.md) for more documentation! 
----
-
-## License Summary
-
-This repository is **proprietary** and **not open source**.
-
-- Ownership is retained exclusively by the original Mustang Market founders
-- Source code access is permitted **for academic review only**
-- Modification, redistribution, deployment, or commercial use is prohibited
-- No affiliation with Cal Poly is claimed or implied
-
-See `LICENSE.md` for the full, legally binding terms.
-
-[mustang-market.com](https://mustang-market.com)
+- Search covers every active listing instead of the 50 already in the browser: up to 180 prefix
+  terms per listing, 10-term queries, relevance-plus-freshness scoring, 250 ms input debounce.
+- The search backfill reindexes legacy listings 200 documents per batch and skips unchanged
+  records, so it is safe to re-run.
+- Ratings are 1–5 stars with reviews up to 500 characters, transactional profile averages, and a
+  five-messages-from-each-party gate before either side can rate.
+- Listing photos (up to eight) are converted from HEIC, resized to a 1920×1920 bound, and
+  re-encoded at JPEG quality 0.8 in the browser before upload.
+- The strict-TypeScript pass touched 38 files (302 additions, 227 deletions) across UI, server
+  actions, Firebase utilities, notifications, messaging, and map components.
+- Team codebase scope: roughly 19.6k lines on web and 30.3k on mobile.

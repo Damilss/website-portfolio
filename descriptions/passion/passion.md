@@ -1,37 +1,36 @@
-# Passion Projects
+---
+title: Passion Projects
+summary: The projects nobody assigned me — products, tools, and long-term bets built because the problem was interesting enough to keep working on.
+---
 
-The home page says I'm "building software systems, focusing on cyber security
-and low-level optimization, all while learning across the full stack." This
-folder is where that actually happens — the projects nobody assigned me.
-
-These are the things I build because the problem bugged me, or because the only
-way to really learn something is to ship it. Some are full products, some are
-multi-year bets, some are small tools that scratch a single itch.
+These are the projects nobody assigned me: the ones I started because the
+problem bugged me, or because shipping something is the only way to really
+learn it. Some are real products, some are small tools that scratch a single
+itch, and some are still closer to a plan than a program. Each page says
+plainly which it is.
 
 ## What's in here
 
-- **mustang-market** — a peer-to-peer marketplace gated to verified `.edu`
-  emails, built for the Cal Poly community. Escrow payments, a QR-code "digital
-  handshake" on pickup, and a campus trust score. Next.js + Firebase + Stripe
-  Connect, with a React Native app in progress.
-- **AIsore** — an AI content detection platform. Submit text, photos, video, or
-  links and get a human-vs-AI verdict with a confidence score. Express +
-  PostgreSQL + a BullMQ job queue on the backend, React Native on mobile.
-- **OpenHours** — AI-powered office hours. Professors upload course materials;
-  students get an assistant that answers strictly from that content and hints
-  rather than spoils. A hackathon build with two teammates — Next.js, FastAPI,
-  and a Supabase pgvector RAG pipeline.
-- **devsize-plus** — a native macOS disk-usage explorer (TreeSize-style),
-  100% client-side with no servers. Swift, SwiftUI, and Swift Concurrency — my
-  excuse to go deep on native macOS development.
-- **Kymera** — a four-year bet: a privacy browser that poisons and normalizes
-  fingerprinting, starting as a Firefox extension and ending as a full fork.
-  As much a learning roadmap as a project.
-- **realtyworks** — an enterprise property-management interface for running
-  maintenance and repair operations: work orders, vendors, and audit-ready
-  records.
-- **instagram-follower-analyzer** — a small Python script that diffs an
-  Instagram data export to find who doesn't follow you back.
-- **fedora-servertop** — my Fedora server/desktop setup, kept in version control.
+- **mustang-market** — a peer-to-peer marketplace for verified Cal Poly
+  students, built as a Next.js web app and an Expo iOS app on a shared Firebase
+  backend. Co-founded with two others.
+- **realtyworks** — a work-order platform for property managers, where vendors
+  sign in through a magic link and Postgres row-level security is the
+  authorization model.
+- **devsize-plus** — a native, client-only macOS disk-usage explorer in Swift
+  and SwiftUI. The data model and view-model scaffolding exist; the scanner does
+  not yet.
+- **OpenHours** — hackathon-built AI office hours: professors upload course
+  files, and students chat with an assistant scoped to those materials.
+- **AIsore** — an AI-detection app scoring text, photos, video, and links. My
+  work there was failure handling, error reporting, and secret scanning.
+- **Kymera** — a planned privacy browser that normalizes and poisons
+  fingerprinting signals. Two planning documents so far, and no code.
+- **programming-practice-2026** — a practice repo with one written-up folder per
+  problem, plus a C++ track I set myself.
+- **instagram-follower-analyzer** — a standard-library Python script that diffs
+  an Instagram data export to list who does not follow back.
+- **fedora-servertop** — a repo set aside for notes on a server of my own. One
+  README so far.
 
 Open any file in this folder to read the full writeup.
