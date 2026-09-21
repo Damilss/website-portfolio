@@ -1,7 +1,7 @@
 ---
 title: MCP25625 CAN Drivers for Raspberry Pi
 summary: C++ SPI driver work for a Raspberry Pi talking to a Microchip MCP25625 CAN controller, started as a Cal Poly FSAE firmware new-member project.
-period: "Sep 2026"
+period: "Sep 2026 - current"
 status: in-progress
 tags: [C++, SPI, CAN bus, Embedded]
 repo: https://github.com/Damilss/spi-can-pi4-drivers
