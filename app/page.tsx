@@ -78,7 +78,7 @@ export default function Home() {
               className="hero-portrait"
             />
             <p className="hero-copy">
-              Passionate in Development Operations, low-level, and security
+              Passionate in Development Operations, low-level, and OS
             </p>
           </div>
           <GithubContributions />
