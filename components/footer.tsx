@@ -15,10 +15,12 @@
 // (called out in CLAUDE.md "Cross-file invariants").
 // =============================================================================
 
+import { GITHUB_URL } from "@/lib/site";
+
 // Single source of truth for the contact links. Order here = render order.
 // Add/remove entries here to change what shows up; no JSX edits needed.
 const contactLinks = [
-  { label: "GitHub", href: "https://github.com/Damilss" },
+  { label: "GitHub", href: GITHUB_URL },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/emilio-ledesma-scott-41146138a/" },
   // mailto: link — note this is NOT the same constant as PROJECT_EMAIL in
   // start-project-contact.tsx. They must be kept in sync manually.
