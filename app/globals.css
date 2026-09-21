@@ -10,7 +10,8 @@
      2.  @theme inline shim that exposes our tokens to Tailwind utilities.
      3.  Base resets and body styles.
      4.  Home-page shell (.portfolio-shell) + ambient/noise background layers.
-     5.  Hero block (title row, copy, CTAs, "Start a Project" reveal chip).
+     5.  Hero block (title row, copy, CTAs incl. the GitHub pill, "Start a
+         Project" reveal chip).
      6.  Selected Work list (.footer-grid, .work-row, etc.).
      7.  Misc utilities (.mono, .social-links).
      8.  /work page chrome (.work-page-shell, .work-page-header, nav row).
@@ -22,11 +23,11 @@
      13. Focus-visible outline.
      14. Mobile breakpoint (max-width: 860px).
      15. page-enter keyframes (used by the page shells on mount).
-     16. Hero side-by-side row + GitHub panel (graph + cursor blink).
+     16. Hero side-by-side row ([portrait | copy] + GitHub panel with graph +
+         cursor blink).
 
-   Intent / source of truth: docs/landing-rework.md documents the design rationale
-   (color tokens, motion timings, and the corner-footer alignment contract on
-   home). Read that before bigger visual changes.
+   The /work detail page's frontmatter header (.finder-meta*) sits with the
+   rest of the detail-page rules in section 9.
 ============================================================================= */
 
 /* Tailwind v4 — single-line import is all that's needed. The PostCSS plugin
@@ -332,6 +333,24 @@ a {
   border-color: var(--border);
 }
 
+/* GitHub CTA — a .cta-primary peer with the GitHub mark inline (see
+   components/github-cta.tsx). Its resting border carries a hint of accent so
+   it reads as the "external" action next to the two in-site CTAs. */
+.cta-github {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  border-color: color-mix(in srgb, var(--accent) 14%, var(--border));
+}
+
+.cta-github svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: 0 0 auto;
+}
+
 /* =============================================================================
    "START A PROJECT" REVEAL CHIP
    Trigger button that expands an email chip below it. The animation is
@@ -546,6 +565,9 @@ a {
 .work-title {
   font-size: clamp(0.96rem, 1.35vw, 1.08rem);
   color: var(--text-secondary);
+  /* Deliberately NOT text-transform: lowercase. The titles come from each
+     file's frontmatter and carry acronyms that are the whole technical signal
+     — "MCP25625 CAN", "MMIO", "CPE 225" — and lowercasing destroys them. */
   transition: color var(--micro) var(--ease-smooth);
 }
 
@@ -1113,10 +1135,37 @@ a {
   align-items: start;
 }
 
+/* Left cell: [portrait | copy] side-by-side. Deliberately never stacks — a
+   60px avatar sitting above a paragraph reads as orphaned at 400px, while
+   inline it still leaves ~30ch for the copy. */
+.hero-copy-row {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(0.85rem, 1.6vw, 1.1rem);
+  min-width: 0;
+}
+
 /* Strip the .hero-copy default top margin since the parent .hero-row has the
    margin already (otherwise we'd double-up). */
-.hero-row > .hero-copy {
+.hero-copy-row > .hero-copy {
   margin: 0;
+}
+
+/* The portrait: a small circle with the site's hairline border and a soft
+   surface halo so it sits on the ambient background rather than floating.
+   Sized here (not via the Image width/height props, which only set the
+   intrinsic size) so the 900px breakpoint can shrink it. */
+.hero-portrait {
+  flex: 0 0 auto;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-top: 0.15rem;         /* optical alignment with the copy's first line. */
+  border: 1px solid var(--border);
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--surface) 80%, transparent),
+    0 10px 24px -16px var(--accent-glow);
 }
 
 /* Same trick for the GitHub panel — kill its own top margin and ensure it
@@ -1132,6 +1181,11 @@ a {
 @media (max-width: 900px) {
   .hero-row {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hero-portrait {
+    width: 60px;
+    height: 60px;
   }
 }
 
@@ -1445,6 +1499,106 @@ a {
   margin: 0;
   color: var(--text-muted);
   font-size: 0.82rem;
+}
+
+/* -----------------------------------------------------------------------------
+   FRONTMATTER HEADER (.finder-meta) — title / summary / period · status · role
+   / tags / links, rendered above the markdown body from the file's YAML
+   (see app/work/[...slug]/page.tsx). Same 74ch cap as .finder-md so the two
+   blocks share a right edge.
+----------------------------------------------------------------------------- */
+
+.finder-meta {
+  max-width: 74ch;
+  /* Same font-size as .finder-md so both 74ch caps resolve to the SAME pixel
+     width and the header's bottom border lines up with the body's right edge
+     (ch is relative to the element's own font-size). */
+  font-size: 0.95rem;
+  margin-bottom: 1.6rem;
+  padding-bottom: 1.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Mirrors the .finder-md h1 type treatment so a body h1 (if any) matches. */
+.finder-meta-title {
+  margin: 0;
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-weight: 530;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  font-size: clamp(1.5rem, 3.4vw, 2.05rem);
+}
+
+.finder-meta-summary {
+  margin: 0.6rem 0 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* "Apr 2026 · archived · Co-founder" — small mono line, wraps on narrow screens. */
+.finder-meta-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0;
+  margin: 0.9rem 0 0;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.finder-meta-sep {
+  opacity: 0.6;
+  white-space: pre;            /* keep the spaces around the "·". */
+}
+
+/* Status gets a leading dot; live-ish states glow with the accent. */
+.finder-meta-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+}
+
+.finder-meta-status::before {
+  content: "";
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: var(--text-muted);
+}
+
+.finder-meta-status[data-status="active"]::before,
+.finder-meta-status[data-status="in-progress"]::before {
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.finder-meta-status[data-status="shipped"]::before {
+  background: var(--accent-hover);
+}
+
+/* Tag chips reuse .work-tag from the home list. */
+.finder-meta-tags {
+  list-style: none;
+  margin: 0.85rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+/* repo / live / extra links — terminal-link styling with an outward arrow. */
+.finder-meta-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.finder-meta-links .terminal-link::after {
+  content: "\2197";            /* ↗ */
+  margin-left: 0.3rem;
+  opacity: 0.6;
 }
 
 /* -----------------------------------------------------------------------------
