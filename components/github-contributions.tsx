@@ -12,10 +12,8 @@
 "use client";
 
 import { GitHubCalendar } from "react-github-calendar";
-
-// The GitHub username to render contributions for. Hardcoded because the
-// portfolio belongs to one person — no need to make this a prop.
-const GITHUB_USERNAME = "Damilss";
+// The username lives in lib/site.ts (shared with the footer and hero CTA).
+import { GITHUB_USERNAME } from "@/lib/site";
 
 // Color ramp for the contribution heatmap. Values, low → high:
 //   index 0 = no contributions (background square color)
