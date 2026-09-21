@@ -62,4 +62,4 @@ Behavior lives in `lib/descriptions.ts` and `app/work/[...slug]/page.tsx`:
 
 From `.claude/rules.md` (local only — `.claude/` is gitignored): prefer minimal changes, don't break existing behavior, explain before large edits, keep files modular.
 
-**Stale docs — trust the code.** `README.md` is outdated (describes `/work` as hand-authored cards and links `docs/landing-rework.md`, which does not exist).
+**Docs vs. code — trust the code.** `README.md` is the user-facing overview (features, adding a project, config locations, structure). If it disagrees with the code, the code wins; update the README alongside changes that affect it.
