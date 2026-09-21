@@ -68,11 +68,16 @@ export default function StartProjectContact() {
           - The `is-open` class drives the open/close transition in globals.css
             (height + opacity animation).
           - aria-hidden mirrors the visual state so the panel is hidden from
-            assistive tech when collapsed. */}
+            assistive tech when collapsed.
+          - `inert` is what actually takes the collapsed copy button OUT of the
+            tab order. The collapse is opacity/grid-rows only — nothing here is
+            `display: none` — so without it a keyboard user tabs onto an
+            invisible button inside an aria-hidden subtree. */}
       <div
         id="start-project-panel"
         className={`start-project-reveal ${isOpen ? "is-open" : ""}`}
         aria-hidden={!isOpen}
+        inert={!isOpen}
       >
         {/* The chip itself: icon · email · copy button. */}
         <div className="start-project-chip">

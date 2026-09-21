@@ -5,9 +5,12 @@
 // descriptions/. The slug array maps directly to a file path —
 // ["passion","mustang-market"] -> descriptions/passion/mustang-market.md.
 //
-// Markdown is rendered with react-markdown + remark-gfm (some files use GFM
-// tables / strikethrough). `dynamicParams = false` makes any path that isn't a
-// real markdown file render the 404 page.
+// Each file's YAML frontmatter (title, summary, period, status, tags, links —
+// see lib/descriptions.ts) renders as a header block above the markdown body,
+// and also feeds <title> / <meta name="description">. The body is rendered
+// with react-markdown + remark-gfm (some files use GFM tables / strikethrough).
+// `dynamicParams = false` makes any path that isn't a real markdown file render
+// the 404 page.
 // =============================================================================
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -19,8 +22,9 @@ import Footer from "@/components/footer";
 import {
   findFileNode,
   listAllMarkdownFiles,
-  readMarkdownFile,
+  readMarkdown,
 } from "@/lib/descriptions";
+import type { FileMeta, MetaLink } from "@/lib/descriptions";
 
 // Only the markdown files discovered at build time are valid routes.
 export const dynamicParams = false;
@@ -35,8 +39,13 @@ export async function generateMetadata({
   params: Promise<{ slug: string[] }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const node = findFileNode(slug);
-  return { title: node ? `${node.label} — Emilio Ledesma` : "Not found" };
+  const file = readMarkdown(slug);
+  return file
+    ? {
+        title: `${file.meta.title} — Emilio Ledesma`,
+        description: file.meta.summary,
+      }
+    : { title: "Not found" };
 }
 
 // Custom element renderers for the markdown body.
@@ -79,6 +88,16 @@ const markdownComponents: Components = {
   },
 };
 
+// The link row under the header: repo and live first (fixed labels), then any
+// extra `links` from the frontmatter, in file order.
+function metaLinks(meta: FileMeta): MetaLink[] {
+  const out: MetaLink[] = [];
+  if (meta.repo) out.push({ label: "repo", href: meta.repo });
+  if (meta.live) out.push({ label: "live", href: meta.live });
+  if (meta.links) out.push(...meta.links);
+  return out;
+}
+
 export default async function WorkDetailPage({
   params,
 }: {
@@ -86,15 +105,18 @@ export default async function WorkDetailPage({
 }) {
   const { slug } = await params;
   const node = findFileNode(slug);
-  const raw = readMarkdownFile(slug);
+  const file = readMarkdown(slug);
 
   // Belt-and-suspenders alongside dynamicParams=false.
-  if (!node || raw === null) notFound();
+  if (!node || !file) notFound();
 
-  // "Empty" matches the finder tree's definition (lib/descriptions.ts isEmpty:
-  // a 0-byte file) so a file is never shown as empty in one place but not the
-  // other. raw.length === 0 is exactly equivalent to the tree's size === 0.
-  const isEmpty = raw.length === 0;
+  const { meta, body, isEmpty } = file;
+  const links = metaLinks(meta);
+  // Overview files may omit period/status/role; only render the line if there
+  // is something to show.
+  const metaLine = [meta.period, meta.status, meta.role].filter(
+    (part): part is string => Boolean(part),
+  );
 
   // Links back to the finder carry this file's slug so /work can re-open the
   // folders it lives in — see the ?from= handling in components/finder-tree.tsx.
@@ -114,7 +136,7 @@ export default async function WorkDetailPage({
         </div>
       </div>
 
-      <section className="terminal-panel" aria-label={`${node.label} detail`}>
+      <section className="terminal-panel" aria-label={`${meta.title} detail`}>
         <div className="terminal-topbar">
           <div className="terminal-dots" aria-hidden="true">
             <span />
@@ -149,6 +171,61 @@ export default async function WorkDetailPage({
             ))}
           </nav>
 
+          {/* Frontmatter header: title, summary, period · status · role,
+              tag chips, and links. Styled by .finder-meta* in globals.css. */}
+          <header className="finder-meta">
+            <h1 className="finder-meta-title">{meta.title}</h1>
+            <p className="finder-meta-summary">{meta.summary}</p>
+
+            {metaLine.length > 0 && (
+              <p className="finder-meta-line mono">
+                {metaLine.map((part, index) => (
+                  <span key={part}>
+                    {index > 0 && (
+                      <span className="finder-meta-sep" aria-hidden="true">
+                        {" · "}
+                      </span>
+                    )}
+                    {part === meta.status ? (
+                      // Status gets a colored dot via [data-status] in CSS.
+                      <span className="finder-meta-status" data-status={meta.status}>
+                        {part}
+                      </span>
+                    ) : (
+                      part
+                    )}
+                  </span>
+                ))}
+              </p>
+            )}
+
+            {meta.tags && meta.tags.length > 0 && (
+              <ul className="finder-meta-tags" aria-label="Tags">
+                {meta.tags.map((tag) => (
+                  <li key={tag} className="work-tag mono">
+                    {tag}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {links.length > 0 && (
+              <div className="finder-meta-links">
+                {links.map((link) => (
+                  <a
+                    key={`${link.label}:${link.href}`}
+                    className="terminal-link mono"
+                    href={link.href}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            )}
+          </header>
+
           {isEmpty ? (
             <p className="finder-empty mono">
               {`// ${node.name} is empty — nothing documented here yet.`}
@@ -159,7 +236,7 @@ export default async function WorkDetailPage({
                 remarkPlugins={[remarkGfm]}
                 components={markdownComponents}
               >
-                {raw}
+                {body}
               </ReactMarkdown>
             </article>
           )}
