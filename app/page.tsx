@@ -2,7 +2,7 @@
 // Home page (/).
 //
 // Sections:
-f     //   1. Hero block — name, tagline, corner footer, portrait + hero copy beside
+//   1. Hero block — name, tagline, corner footer, portrait + hero copy beside
 //      the GitHub graph, and the CTAs ("view-work", GitHub, "Start a Project").
 //   2. Selected Work — project rows that deep-link into the /work finder.
 //
